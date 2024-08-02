@@ -1,0 +1,30 @@
+default: true
+
+MD013:
+  line_length: 120
+  code_blocks: false
+  tables: false
+
+MD003:
+  style: 'atx'
+
+MD001: true
+
+MD007:
+  indent: 2
+
+MD004:
+  style: 'dash'
+
+MD040: false
+
+MD034: false
+
+MD045: true
+
+MD041: false
+
+MD033: false
+
+MD012:
+  maximum: 1
