@@ -1,0 +1,24 @@
+version: v1
+plugins:
+  # Go
+  - name: go
+    out: ../api/pkg/generated/proto
+    opt:
+      - paths=source_relative
+  - name: go-grpc
+    out: ../api/pkg/generated/proto
+    opt:
+      - paths=source_relative
+  # Optional: gRPC Gateway for RESTful API
+  - name: grpc-gateway
+    out: ../api/pkg/generated/proto
+    opt:
+      - paths=source_relative
+  # Optional: OpenAPI (Swagger) specification
+  - plugin: buf.build/grpc-ecosystem/openapiv2:v2.21.0
+    out: ../api/docs/openapi
+  # Python
+  - plugin: buf.build/protocolbuffers/python
+    out: ../worker/src/worker/generated/proto
+  - plugin: buf.build/grpc/python
+    out: ../worker/src/worker/generated/proto
