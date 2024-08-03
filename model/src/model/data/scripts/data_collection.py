@@ -1,7 +1,8 @@
-import requests
-import base64
-import os
+# data/scripts/data_collection.py
+
 from github import Github
+import os
+import base64
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,7 +24,7 @@ def search_manim_code():
     for file in results:
         try:
             repo = file.repository
-            content = file.decoded_content.decode()
+            content = base64.b64decode(file.content).decode('utf-8')
 
             # Manimのインポートを含むファイルのみを保存
             if "import manim" in content or "from manim import" in content:
