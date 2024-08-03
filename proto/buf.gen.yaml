@@ -19,6 +19,8 @@ plugins:
     out: ../api/docs/openapi
   # Python
   - plugin: buf.build/protocolbuffers/python
-    out: ../worker/src/worker/generated/proto
+    out: ../worker/src/generated/proto
   - plugin: buf.build/grpc/python
-    out: ../worker/src/worker/generated/proto
+    out: ../worker/src/generated/proto
+  - plugin: buf.build/protocolbuffers/pyi
+    out: ../worker/src/generated/proto

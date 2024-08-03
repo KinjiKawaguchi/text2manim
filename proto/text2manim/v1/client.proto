@@ -60,6 +60,7 @@ message GenerationStatus {
   }
   Status status = 1;
   string video_url = 2;
+  string script_url = 5;
   string prompt = 3;
   int64 updated_at = 4;
 }

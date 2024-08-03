@@ -2,7 +2,8 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from text2manim.v1 import worker_pb2 as text2manim_dot_v1_dot_worker__pb2
+from generated.proto.text2manim.v1 import worker_pb2 as text2manim_dot_v1_dot_worker__pb2
+import grpc.experimental
 
 
 class WorkerServiceStub(object):
