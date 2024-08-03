@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package text2manim.v1;
+import "google/api/annotations.proto";
+import "google/api/httpbody.proto";
+
+option go_package = "github.com/KinjiKawaguchi/text2manim/api/pkg/text2manim/v1;text2manim_v1";
+
+service Text2ManimService {
+  rpc CreateGeneration(CreateGenerationRequest) returns (CreateGenerationResponse) {
+      option (google.api.http) = {
+          post: "/v1/generations"
+          body: "*"
+        };
+  }
+  rpc GetGenerationStatus(GetGenerationStatusRequest) returns (GetGenerationStatusResponse) {
+      option (google.api.http) = {
+          get: "/v1/generations/{request_id}"
+        };
+  }
+
+  rpc StreamGenerationStatus(StreamGenerationStatusRequest) returns (stream StreamGenerationStatusResponse) {
+      option (google.api.http) = {
+          get: "/v1/generations/{request_id}/stream"
+        };
+  }
+}
+
+message CreateGenerationRequest {
+    string prompt = 1;
+}
+
+message CreateGenerationResponse {
+    string request_id = 1;
+}
+
+message GetGenerationStatusRequest {
+    string request_id = 1;
+}
+
+message GetGenerationStatusResponse {
+    GenerationStatus generation_status = 1;
+}
+
+message StreamGenerationStatusRequest {
+    string request_id = 1;
+}
+
+message  StreamGenerationStatusResponse {
+    GenerationStatus generation_status = 1;
+}
+
+
+message GenerationStatus {
+    enum Status {
+      STATUS_UNSPECIFIED = 0;
+      STATUS_PENDING = 1;
+      STATUS_PROCESSING = 2;
+      STATUS_COMPLETED = 3;
+      STATUS_FAILED = 4;
+    }
+    Status status = 1;
+    string video_url = 2;
+    float progress = 3;
+    string message = 4;
+    int64 updated_At = 5;
+  }
