@@ -2,16 +2,16 @@ version: v1
 plugins:
   # Go
   - name: go
-    out: ../api/pkg/generated/proto
+    out: ../api/pkg/pb
     opt:
       - paths=source_relative
   - name: go-grpc
-    out: ../api/pkg/generated/proto
+    out: ../api/pkg/pb
     opt:
       - paths=source_relative
   # Optional: gRPC Gateway for RESTful API
   - name: grpc-gateway
-    out: ../api/pkg/generated/proto
+    out: ../api/pkg/pb
     opt:
       - paths=source_relative
   # Optional: OpenAPI (Swagger) specification
