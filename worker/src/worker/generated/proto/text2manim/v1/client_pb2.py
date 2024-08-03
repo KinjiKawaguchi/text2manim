@@ -26,14 +26,14 @@ from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from google.api import httpbody_pb2 as google_dot_api_dot_httpbody__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1atext2manim/v1/client.proto\x12\rtext2manim.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/api/httpbody.proto\"1\n\x17\x43reateGenerationRequest\x12\x16\n\x06prompt\x18\x01 \x01(\tR\x06prompt\"9\n\x18\x43reateGenerationResponse\x12\x1d\n\nrequest_id\x18\x01 \x01(\tR\trequestId\";\n\x1aGetGenerationStatusRequest\x12\x1d\n\nrequest_id\x18\x01 \x01(\tR\trequestId\"k\n\x1bGetGenerationStatusResponse\x12L\n\x11generation_status\x18\x01 \x01(\x0b\x32\x1f.text2manim.v1.GenerationStatusR\x10generationStatus\">\n\x1dStreamGenerationStatusRequest\x12\x1d\n\nrequest_id\x18\x01 \x01(\tR\trequestId\"n\n\x1eStreamGenerationStatusResponse\x12L\n\x11generation_status\x18\x01 \x01(\x0b\x32\x1f.text2manim.v1.GenerationStatusR\x10generationStatus\"\xba\x02\n\x10GenerationStatus\x12>\n\x06status\x18\x01 \x01(\x0e\x32&.text2manim.v1.GenerationStatus.StatusR\x06status\x12\x1b\n\tvideo_url\x18\x02 \x01(\tR\x08videoUrl\x12\x1a\n\x08progress\x18\x03 \x01(\x02R\x08progress\x12\x18\n\x07message\x18\x04 \x01(\tR\x07message\x12\x1d\n\nupdated_At\x18\x05 \x01(\x03R\tupdatedAt\"t\n\x06Status\x12\x16\n\x12STATUS_UNSPECIFIED\x10\x00\x12\x12\n\x0eSTATUS_PENDING\x10\x01\x12\x15\n\x11STATUS_PROCESSING\x10\x02\x12\x14\n\x10STATUS_COMPLETED\x10\x03\x12\x11\n\rSTATUS_FAILED\x10\x04\x32\xd0\x03\n\x11Text2ManimService\x12\x7f\n\x10\x43reateGeneration\x12&.text2manim.v1.CreateGenerationRequest\x1a\'.text2manim.v1.CreateGenerationResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\"\x0f/v1/generations:\x01*\x12\x92\x01\n\x13GetGenerationStatus\x12).text2manim.v1.GetGenerationStatusRequest\x1a*.text2manim.v1.GetGenerationStatusResponse\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/v1/generations/{request_id}\x12\xa4\x01\n\x16StreamGenerationStatus\x12,.text2manim.v1.StreamGenerationStatusRequest\x1a-.text2manim.v1.StreamGenerationStatusResponse\"+\x82\xd3\xe4\x93\x02%\x12#/v1/generations/{request_id}/stream0\x01\x42JZHgithub.com/KinjiKawaguchi/text2manim/api/pkg/text2manim/v1;text2manim_v1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1atext2manim/v1/client.proto\x12\rtext2manim.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/api/httpbody.proto\"1\n\x17\x43reateGenerationRequest\x12\x16\n\x06prompt\x18\x01 \x01(\tR\x06prompt\"9\n\x18\x43reateGenerationResponse\x12\x1d\n\nrequest_id\x18\x01 \x01(\tR\trequestId\";\n\x1aGetGenerationStatusRequest\x12\x1d\n\nrequest_id\x18\x01 \x01(\tR\trequestId\"k\n\x1bGetGenerationStatusResponse\x12L\n\x11generation_status\x18\x01 \x01(\x0b\x32\x1f.text2manim.v1.GenerationStatusR\x10generationStatus\">\n\x1dStreamGenerationStatusRequest\x12\x1d\n\nrequest_id\x18\x01 \x01(\tR\trequestId\"n\n\x1eStreamGenerationStatusResponse\x12L\n\x11generation_status\x18\x01 \x01(\x0b\x32\x1f.text2manim.v1.GenerationStatusR\x10generationStatus\"\x9c\x02\n\x10GenerationStatus\x12>\n\x06status\x18\x01 \x01(\x0e\x32&.text2manim.v1.GenerationStatus.StatusR\x06status\x12\x1b\n\tvideo_url\x18\x02 \x01(\tR\x08videoUrl\x12\x16\n\x06prompt\x18\x03 \x01(\tR\x06prompt\x12\x1d\n\nupdated_at\x18\x04 \x01(\x03R\tupdatedAt\"t\n\x06Status\x12\x16\n\x12STATUS_UNSPECIFIED\x10\x00\x12\x12\n\x0eSTATUS_PENDING\x10\x01\x12\x15\n\x11STATUS_PROCESSING\x10\x02\x12\x14\n\x10STATUS_COMPLETED\x10\x03\x12\x11\n\rSTATUS_FAILED\x10\x04\x32\xd0\x03\n\x11Text2ManimService\x12\x7f\n\x10\x43reateGeneration\x12&.text2manim.v1.CreateGenerationRequest\x1a\'.text2manim.v1.CreateGenerationResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\"\x0f/v1/generations:\x01*\x12\x92\x01\n\x13GetGenerationStatus\x12).text2manim.v1.GetGenerationStatusRequest\x1a*.text2manim.v1.GetGenerationStatusResponse\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/v1/generations/{request_id}\x12\xa4\x01\n\x16StreamGenerationStatus\x12,.text2manim.v1.StreamGenerationStatusRequest\x1a-.text2manim.v1.StreamGenerationStatusResponse\"+\x82\xd3\xe4\x93\x02%\x12#/v1/generations/{request_id}/stream0\x01\x42MZKgithub.com/kinjikawaguchi/text2manim/api/pkg/pb/text2manim/v1;text2manim_v1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'text2manim.v1.client_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
-  _globals['DESCRIPTOR']._serialized_options = b'ZHgithub.com/KinjiKawaguchi/text2manim/api/pkg/text2manim/v1;text2manim_v1'
+  _globals['DESCRIPTOR']._serialized_options = b'ZKgithub.com/kinjikawaguchi/text2manim/api/pkg/pb/text2manim/v1;text2manim_v1'
   _globals['_TEXT2MANIMSERVICE'].methods_by_name['CreateGeneration']._loaded_options = None
   _globals['_TEXT2MANIMSERVICE'].methods_by_name['CreateGeneration']._serialized_options = b'\202\323\344\223\002\024\"\017/v1/generations:\001*'
   _globals['_TEXT2MANIMSERVICE'].methods_by_name['GetGenerationStatus']._loaded_options = None
@@ -53,9 +53,9 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_STREAMGENERATIONSTATUSRESPONSE']._serialized_start=446
   _globals['_STREAMGENERATIONSTATUSRESPONSE']._serialized_end=556
   _globals['_GENERATIONSTATUS']._serialized_start=559
-  _globals['_GENERATIONSTATUS']._serialized_end=873
-  _globals['_GENERATIONSTATUS_STATUS']._serialized_start=757
-  _globals['_GENERATIONSTATUS_STATUS']._serialized_end=873
-  _globals['_TEXT2MANIMSERVICE']._serialized_start=876
-  _globals['_TEXT2MANIMSERVICE']._serialized_end=1340
+  _globals['_GENERATIONSTATUS']._serialized_end=843
+  _globals['_GENERATIONSTATUS_STATUS']._serialized_start=727
+  _globals['_GENERATIONSTATUS_STATUS']._serialized_end=843
+  _globals['_TEXT2MANIMSERVICE']._serialized_start=846
+  _globals['_TEXT2MANIMSERVICE']._serialized_end=1310
 # @@protoc_insertion_point(module_scope)

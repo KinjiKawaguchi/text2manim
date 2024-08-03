@@ -174,11 +174,7 @@
         "videoUrl": {
           "type": "string"
         },
-        "progress": {
-          "type": "number",
-          "format": "float"
-        },
-        "message": {
+        "prompt": {
           "type": "string"
         },
         "updatedAt": {
