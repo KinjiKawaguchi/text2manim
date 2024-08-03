@@ -16,16 +16,47 @@ certifi==2024.7.4
     # via requests
 charset-normalizer==3.3.2
     # via requests
+click==8.1.7
+    # via cloup
+    # via manim
+cloup==3.0.5
+    # via manim
+cython==3.0.10
+    # via screeninfo
+decorator==5.1.1
+    # via manim
+filelock==3.15.4
+    # via huggingface-hub
+    # via torch
+    # via transformers
+fsspec==2024.6.1
+    # via huggingface-hub
+    # via torch
+glcontext==2.5.0
+    # via moderngl
 google-api-core==2.19.1
     # via google-api-python-client
+    # via google-cloud-core
+    # via google-cloud-storage
 google-api-python-client==2.139.0
     # via worker
 google-auth==2.32.0
     # via google-api-core
     # via google-api-python-client
     # via google-auth-httplib2
+    # via google-cloud-core
+    # via google-cloud-storage
 google-auth-httplib2==0.2.0
     # via google-api-python-client
+google-cloud-core==2.4.1
+    # via google-cloud-storage
+google-cloud-storage==2.18.0
+    # via worker
+google-crc32c==1.5.0
+    # via google-cloud-storage
+    # via google-resumable-media
+google-resumable-media==2.7.1
+    # via google-cloud-storage
 googleapis-common-protos==1.63.2
     # via google-api-core
 grpcio==1.65.4
@@ -33,8 +64,53 @@ grpcio==1.65.4
 httplib2==0.22.0
     # via google-api-python-client
     # via google-auth-httplib2
+huggingface-hub==0.24.5
+    # via tokenizers
+    # via transformers
 idna==3.7
     # via requests
+isosurfaces==0.1.2
+    # via manim
+jinja2==3.1.4
+    # via torch
+manim==0.18.1
+    # via worker
+manimpango==0.5.0
+    # via manim
+mapbox-earcut==1.0.1
+    # via manim
+markdown-it-py==3.0.0
+    # via rich
+markupsafe==2.1.5
+    # via jinja2
+mdurl==0.1.2
+    # via markdown-it-py
+moderngl==5.10.0
+    # via manim
+    # via moderngl-window
+moderngl-window==2.4.6
+    # via manim
+mpmath==1.3.0
+    # via sympy
+multipledispatch==1.0.0
+    # via pyrr
+networkx==3.3
+    # via manim
+    # via torch
+numpy==1.26.4
+    # via isosurfaces
+    # via manim
+    # via mapbox-earcut
+    # via moderngl-window
+    # via pyrr
+    # via scipy
+    # via transformers
+packaging==24.1
+    # via huggingface-hub
+    # via transformers
+pillow==10.4.0
+    # via manim
+    # via moderngl-window
 proto-plus==1.24.0
     # via google-api-core
 protobuf==5.27.3
@@ -47,13 +123,70 @@ pyasn1==0.6.0
     # via rsa
 pyasn1-modules==0.4.0
     # via google-auth
+pycairo==1.26.1
+    # via manim
+pydub==0.25.1
+    # via manim
+pyglet==2.0.16
+    # via moderngl-window
+pygments==2.18.0
+    # via manim
+    # via rich
+pyobjc-core==10.3.1
+    # via pyobjc-framework-cocoa
+pyobjc-framework-cocoa==10.3.1
+    # via screeninfo
 pyparsing==3.1.2
     # via httplib2
+pyrr==0.10.3
+    # via moderngl-window
+pyyaml==6.0.1
+    # via huggingface-hub
+    # via transformers
+regex==2024.7.24
+    # via transformers
 requests==2.32.3
     # via google-api-core
+    # via google-cloud-storage
+    # via huggingface-hub
+    # via transformers
+rich==13.7.1
+    # via manim
 rsa==4.9
     # via google-auth
+safetensors==0.4.3
+    # via transformers
+scipy==1.14.0
+    # via manim
+screeninfo==0.8.1
+    # via manim
+setuptools==72.1.0
+    # via torch
+skia-pathops==0.8.0.post1
+    # via manim
+srt==3.5.3
+    # via manim
+svgelements==1.9.6
+    # via manim
+sympy==1.13.1
+    # via torch
+tokenizers==0.19.1
+    # via transformers
+torch==2.4.0
+    # via worker
+tqdm==4.66.4
+    # via huggingface-hub
+    # via manim
+    # via transformers
+transformers==4.43.3
+    # via worker
+typing-extensions==4.12.2
+    # via huggingface-hub
+    # via manim
+    # via torch
 uritemplate==4.1.1
     # via google-api-python-client
 urllib3==2.2.2
     # via requests
+watchdog==4.0.1
+    # via manim
