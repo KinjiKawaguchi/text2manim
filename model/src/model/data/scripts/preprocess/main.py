@@ -28,9 +28,9 @@ def save_result(file_path, result):
 
 # メイン処理
 def main():
-    prompt = load_prompt('prompt.txt')
-    input_directory = '../../data/raw_codes'
-    output_directory = '../../data/processed_codes'
+    prompt = load_prompt('src/model/data/scripts/preprocess/prompt.txt')
+    input_directory = 'data/raw/'
+    output_directory = 'data/processed_codes'
 
     os.makedirs(output_directory, exist_ok=True)
 
