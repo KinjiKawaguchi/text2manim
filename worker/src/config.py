@@ -14,6 +14,12 @@ class Config:
         self.gcp_bucket_name: str = os.getenv("GCP_BUCKET_NAME", "")
         self.gcp_credentials_path: str = os.getenv("GCP_CREDENTIALS_PATH", "")
 
+        # OpenAI APIを使用する場合の設定
+        # OpenAIのモデルを使うかどうか
+        self.use_openai: bool = os.getenv("USE_OPENAI", "false").lower() == "true"
+        self.openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
+        self.openai_model = os.getenv("OPENAI_MODEL", "gpt-4o")
+
         # モデル設定
         self.model_name: str = os.getenv("MODEL_NAME", "your-username/your-model-name")
         self.model_max_length: int = int(os.getenv("MODEL_MAX_LENGTH", "1000"))
@@ -55,6 +61,10 @@ class Config:
         Storage Type: {self.storage_type}
         Local Storage Path: {self.local_storage_path}
         GCP Bucket Name: {self.gcp_bucket_name}
+        GCP Credentials Path: {self.gcp_credentials_path}
+        Use OpenAI: {self.use_openai}
+        OpenAI API Key: {self.openai_api_key}
+        OpenAI Model: {self.openai_model}
         Model Name: {self.model_name}
         Model Max Length: {self.model_max_length}
         Model Temperature: {self.model_temperature}
