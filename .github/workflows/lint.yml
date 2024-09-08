@@ -29,13 +29,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pylint black isort
       - name: Run pylint
-        run: pylint **/*.py
+        run: pylint **/*.py --ignore=worker/src/worker/generated
       - name: Run black
         run: black --check .
       - name: Run isort
