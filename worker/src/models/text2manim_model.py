@@ -3,15 +3,44 @@ import tempfile
 import os
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+from openai import OpenAI
+from openai.types.chat import ChatCompletion
+from typing import Optional
+
 
 class Text2ManimModel:
     def __init__(self, config):
         self.config = config
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.tokenizer = AutoTokenizer.from_pretrained(config.model_name)
-        self.model = AutoModelForCausalLM.from_pretrained(config.model_name).to(self.device)
+        if self.config.use_openai:
+            self.client = OpenAI(api_key=self.config.openai_api_key)
+        else:
+            self.device = "cuda" if torch.cuda.is_available() else "cpu"
+            self.tokenizer = AutoTokenizer.from_pretrained(config.model_name)
+            self.model = AutoModelForCausalLM.from_pretrained(config.model_name).to(self.device)
 
-    def generate_script(self, prompt):
+    def _generate_script_openai(self, prompt: str) -> Optional[str]:
+        try:
+            response: ChatCompletion = self.client.chat.completions.create(
+                model=self.config.openai_model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that generates Manim scripts."},
+                    {"role": "user", "content": f"Generate a Manim script for the following prompt: {prompt}"}
+                ],
+                max_tokens=1000,
+                temperature=0.7,
+            )
+
+            content = response.choices[0].message.content
+            if content is None:
+                print("Warning: Received empty content from OpenAI API")
+                return None
+
+            return content
+        except Exception as e:
+            print(f"Error occurred while generating script: {str(e)}")
+            return None
+
+    def _generate_script_local(self, prompt: str) -> str:
         # プロンプトの準備
         full_prompt = f"Generate a Manim script for the following prompt: {prompt}\n\nMakim script:"
 
@@ -37,6 +66,13 @@ class Text2ManimModel:
         script = generated_script.split("Makim script:")[-1].strip()
 
         return script
+
+
+    def generate_script(self, prompt):
+        if self.config.use_openai:
+            return self._generate_script_openai(prompt)
+        else:
+            return self._generate_script_local(prompt)
 
     def generate_video(self, script):
         with tempfile.TemporaryDirectory() as tmpdir:
