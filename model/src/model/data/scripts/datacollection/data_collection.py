@@ -140,6 +140,6 @@ if __name__ == "__main__":
     # Remove duplicates based on URL
     unique_data = list({item['url']: item for item in all_collected_data}.values())
 
-    base_output_dir = "./data/raw"
+    base_output_dir = "./assets/raw"
     save_collected_data(unique_data, base_output_dir)
     print(f"Collected a total of {len(unique_data)} unique Manim code samples.")
