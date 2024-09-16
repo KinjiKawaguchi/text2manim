@@ -46,33 +46,32 @@ pipeline = transformers.pipeline(
     device_map=device_map,
 )
 
-prompt = """```
-Create a Manim code to visually explain the patterns of the discriminant D in quadratic equations. The animation should include:
+prompt = """
+# Create a Manim code to visually explain the patterns of the discriminant D in quadratic equations. The animation should include:
 
-1. A brief introduction to the quadratic equation ax^2 + bx + c = 0 and the discriminant formula D = b^2 - 4ac.
+# 1. A brief introduction to the quadratic equation ax^2 + bx + c = 0 and the discriminant formula D = b^2 - 4ac.
 
-2. Three separate scenes, each demonstrating one of the following cases:
-   a. D > 0: Two distinct real roots
-   b. D = 0: One repeated root
-   c. D < 0: Two complex roots
+# 2. Three separate scenes, each demonstrating one of the following cases:
+#    a. D > 0: Two distinct real roots
+#    b. D = 0: One repeated root
+#    c. D < 0: Two complex roots
 
-3. For each case, show:
-   - The parabola of the quadratic function
-   - The x-axis
-   - The intersection point(s) of the parabola and the x-axis (if any)
-   - The value of D and its calculation
+# 3. For each case, show:
+#    - The parabola of the quadratic function
+#    - The x-axis
+#    - The intersection point(s) of the parabola and the x-axis (if any)
+#    - The value of D and its calculation
 
-4. Use different colors to highlight important elements (e.g., roots, parabola, D value).
+# 4. Use different colors to highlight important elements (e.g., roots, parabola, D value).
 
-5. Add text explanations for each case, describing the nature of the roots and the relationship between the parabola and the x-axis.
+# 5. Add text explanations for each case, describing the nature of the roots and the relationship between the parabola and the x-axis.
 
-6. Include smooth transitions between scenes and use animations to draw the parabolas and show the calculations of D.
+# 6. Include smooth transitions between scenes and use animations to draw the parabolas and show the calculations of D.
 
-7. End with a summary scene that recaps the three cases side by side for easy comparison.
+# 7. End with a summary scene that recaps the three cases side by side for easy comparison.
 
-Make sure the code is well-commented and follows Manim best practices for clarity and efficiency.
-Draw the graph of a quadratic function and indicate its vertex and axis.```
-
+# Make sure the code is well-commented and follows Manim best practices for clarity and efficiency.
+# Draw the graph of a quadratic function and indicate its vertex and axis.
 # Begin your code here
 from manim import *
 """
@@ -100,6 +99,6 @@ with open(output_file, 'w') as f:
     for seq in sequences:
         result = seq['generated_text']
         print(f"Result: {result}")
-        f.write(f"Result: {result}\n")
+        f.write(f"{result}\n")
 
 print(f"Output saved to: {output_file}")
