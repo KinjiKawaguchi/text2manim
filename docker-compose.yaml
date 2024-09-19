@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  # APIのポートを適切に設定してください
+    environment:
+      - CONFIG_FILE=/root/config/config.yaml
+    volumes:
+      - ./api/config:/root/config
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    ports:
+      - "50052:50052"
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - ./worker/.env:/app/.env
+
+networks:
+  default:
+    name: text2manim-network
