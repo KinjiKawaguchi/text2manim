@@ -2,13 +2,22 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.grpc
     ports:
       - "8080:8080"  # APIのポートを適切に設定してください
     environment:
       - CONFIG_FILE=/root/config/config.yaml
     volumes:
       - ./api/config:/root/config
+
+  gateway:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - grpc-server
 
   worker:
     build:
