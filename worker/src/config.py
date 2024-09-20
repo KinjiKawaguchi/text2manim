@@ -1,5 +1,8 @@
 import os
 from typing import List
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Config:
     def __init__(self):
@@ -19,6 +22,9 @@ class Config:
         self.use_openai: bool = os.getenv("USE_OPENAI", "false").lower() == "true"
         self.openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
         self.openai_model = os.getenv("OPENAI_MODEL", "gpt-4o")
+        self.openai_max_tokens: int = int(os.getenv("OPENAI_MAX_TOKENS", "1000"))
+        self.openai_temperature: float = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
+        self.openai_top_p: float = float(os.getenv("OPENAI_TOP_P", "0.95"))
 
         # モデル設定
         self.model_name: str = os.getenv("MODEL_NAME", "your-username/your-model-name")
@@ -39,6 +45,7 @@ class Config:
         self.allowed_ips: List[str] = os.getenv("ALLOWED_IPS", "").split(",")
 
         self.validate()
+        print(self.__str__())
 
     def validate(self):
         if self.storage_type not in ["local", "gcp"]:
@@ -65,6 +72,9 @@ class Config:
         Use OpenAI: {self.use_openai}
         OpenAI API Key: {self.openai_api_key}
         OpenAI Model: {self.openai_model}
+        OpenAI Max Tokens: {self.openai_max_tokens}
+        OpenAI Temperature: {self.openai_temperature}
+        OpenAI Top P: {self.openai_top_p}
         Model Name: {self.model_name}
         Model Max Length: {self.model_max_length}
         Model Temperature: {self.model_temperature}

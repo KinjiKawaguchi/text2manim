@@ -188,6 +188,8 @@ pyparsing==3.1.2
     # via httplib2
 pyrr==0.10.3
     # via moderngl-window
+python-dotenv==1.0.1
+    # via worker
 pyyaml==6.0.1
     # via huggingface-hub
     # via transformers

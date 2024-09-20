@@ -1,10 +1,11 @@
 import grpc
 from concurrent import futures
 import logging
-from generated.proto.text2manim.v1 import worker_pb2_grpc
-from worker.worker import WorkerServicer
-from config import Config
-from utils.logger import setup_logger
+from src.generated.proto.text2manim.v1 import worker_pb2_grpc
+from src.worker.worker import WorkerServicer
+from src.config import Config
+from src.utils.logger import setup_logger
+
 
 
 def serve():

@@ -1,5 +1,5 @@
-from storage.local_storage import LocalStorage
-from storage.cloud_storage.gcp import GCPStorage
+from src.storage.local_storage import LocalStorage
+from src.storage.cloud_storage.gcp import GCPStorage
 
 
 class StorageManager:

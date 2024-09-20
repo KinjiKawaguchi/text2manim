@@ -6,11 +6,12 @@ import torch
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from typing import Optional
+from src.config import Config
 
 
 class Text2ManimModel:
     def __init__(self, config):
-        self.config = config
+        self.config: Config = config
         if self.config.use_openai:
             self.client = OpenAI(api_key=self.config.openai_api_key)
         else:
@@ -26,8 +27,9 @@ class Text2ManimModel:
                     {"role": "system", "content": "You are a helpful assistant that generates Manim scripts."},
                     {"role": "user", "content": f"Generate a Manim script for the following prompt: {prompt}"}
                 ],
-                max_tokens=1000,
-                temperature=0.7,
+                max_tokens=self.config.openai_max_tokens,
+                temperature=self.config.openai_temperature,
+                top_p=self.config.openai_top_p,
             )
 
             content = response.choices[0].message.content
