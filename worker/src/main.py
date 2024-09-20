@@ -9,8 +9,9 @@ from src.utils.logger import setup_logger
 
 
 def serve():
-    config = Config()
     logger = setup_logger()
+    config = Config()
+    logger.info(config.__str__())
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     worker_pb2_grpc.add_WorkerServiceServicer_to_server(
