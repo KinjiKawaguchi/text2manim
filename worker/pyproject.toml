@@ -9,8 +9,14 @@ dependencies = [
     "grpcio>=1.65.4",
     "google-api-python-client>=2.139.0",
     "protobuf>=5.27.3",
+    "transformers>=4.43.3",
+    "torch>=2.4.0",
+    "manim>=0.18.1",
+    "google-cloud-storage>=2.18.0",
+    "openai>=1.44.0",
+    "python-dotenv>=1.0.1",
 ]
-readme = "../README.md"
+readme = "README.md"
 requires-python = ">= 3.8"
 
 [build-system]
@@ -25,4 +31,4 @@ dev-dependencies = []
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/worker"]
+packages = ["src/worker","src/generated"]

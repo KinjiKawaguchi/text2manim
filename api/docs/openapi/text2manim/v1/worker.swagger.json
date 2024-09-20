@@ -55,6 +55,9 @@
         },
         "script": {
           "type": "string"
+        },
+        "scriptUrl": {
+          "type": "string"
         }
       }
     },
@@ -68,6 +71,9 @@
           "type": "boolean"
         },
         "videoUrl": {
+          "type": "string"
+        },
+        "scriptUrl": {
           "type": "string"
         },
         "errorMessage": {

@@ -17,6 +17,7 @@ message GenerateManimScriptRequest {
 message GenerateManimScriptResponse {
   string task_id = 1;
   string script = 2;
+  string script_url = 3;
 }
 
 message GenerateManimVideoRequest {
@@ -28,5 +29,6 @@ message GenerateManimVideoResponse {
   string task_id = 1;
   bool success = 2;
   string video_url = 3;
+  string script_url = 5;
   string error_message = 4;
 }
