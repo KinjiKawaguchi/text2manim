@@ -7,9 +7,11 @@ services:
       - "50051:50051"
     environment:
       - CONFIG_FILE=/root/config/config.yaml
+      - DATABASE_URL=postgresql://user:password@db:5432/dbname
     volumes:
       - ./api/config:/root/config
-
+    depends_on:
+      - db
   gateway:
     build:
       context: ./api
@@ -18,7 +20,6 @@ services:
       - "8080:8080"
     depends_on:
       - api
-
   worker:
     build:
       context: ./worker
@@ -27,8 +28,24 @@ services:
       - "50052:50052"
     environment:
       - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://user:password@db:5432/dbname
     volumes:
       - ./worker/.env:/app/.env
+    depends_on:
+      - db
+  db:
+    image: postgres:16.4-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dbname
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
 
 networks:
   default:
