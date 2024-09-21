@@ -24,8 +24,5 @@ WORKDIR /root/
 # ビルドしたバイナリのコピー
 COPY --from=builder /text2manim-gateway .
 
-# 設定ファイルのコピー（必要な場合）
-COPY config/gateway-config.yaml ./config/gateway-config.yaml
-
 # 実行コマンド
 CMD ["./text2manim-gateway"]

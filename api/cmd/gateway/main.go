@@ -11,16 +11,17 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const grpcServerAddress = "localhost:50051" // gRPCサーバーのアドレスを適切に設定してください
+const grpcServerAddress = "api:50051"
 
 func main() {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	mux := runtime.NewServeMux()
+	mux := runtime.NewServeMux(
+		runtime.WithIncomingHeaderMatcher(CustomMatcher),
+	    )
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-
 	err := pb.RegisterText2ManimServiceHandlerFromEndpoint(ctx, mux, grpcServerAddress, opts)
 	if err != nil {
 		log.Fatalf("Failed to register gRPC gateway: %v", err)
@@ -29,5 +30,14 @@ func main() {
 	log.Printf("Starting HTTP server on :8080")
 	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatalf("Failed to serve HTTP: %v", err)
+	}
+}
+
+func CustomMatcher(key string) (string, bool) {
+	switch key {
+	case "X-Api-Key":
+	    return key, true
+	default:
+	    return runtime.DefaultHeaderMatcher(key)
 	}
 }
