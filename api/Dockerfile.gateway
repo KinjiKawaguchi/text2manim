@@ -1,0 +1,28 @@
+# ビルドステージ
+FROM golang:1.23.1 as builder
+
+WORKDIR /app
+
+# 依存関係のコピーとダウンロード
+COPY go.mod go.sum ./
+RUN go mod download
+
+# ソースコードのコピー
+COPY . .
+
+# バイナリのビルド
+RUN CGO_ENABLED=0 GOOS=linux go build -o /text2manim-gateway ./cmd/gateway
+
+# 実行ステージ
+FROM alpine:latest
+
+# 必要なCA証明書の追加
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+
+# ビルドしたバイナリのコピー
+COPY --from=builder /text2manim-gateway .
+
+# 実行コマンド
+CMD ["./text2manim-gateway"]
