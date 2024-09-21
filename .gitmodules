@@ -1,0 +1,3 @@
+[submodule "proto/github.com/infobloxopen/protoc-gen-gorm"]
+	path = proto/github.com/infobloxopen/protoc-gen-gorm
+	url = https://github.com/infobloxopen/protoc-gen-gorm.git
