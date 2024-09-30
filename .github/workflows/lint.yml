@@ -21,25 +21,19 @@ jobs:
           version: latest
           working-directory: ./api
 
-  pylint:
-    name: lint-python
+  ruff:
+    name: lint-ruff
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      # ryeのセットアップ
+      - uses: sksat/setup-rye@v0.22.0
+      # ruffのセットアップ
+      - uses: chartboost/ruff-action@v1
         with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pylint black isort
-      - name: Run pylint
-        run: pylint **/*.py --ignore=worker/src/worker/generated
-      - name: Run black
-        run: black --check .
-      - name: Run isort
-        run: isort --check-only --diff .
+          args: 'format --check'
+      - name: Sync Rye
+        run: rye sync
 
   buf-lint:
     name: lint-protobuf
