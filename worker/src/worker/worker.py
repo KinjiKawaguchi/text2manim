@@ -4,6 +4,7 @@ from src.storage.storage_manager import StorageManager
 import grpc
 import logging
 
+
 class WorkerServicer(worker_pb2_grpc.WorkerServiceServicer):
     def __init__(self, config, logger):
         self.config = config
@@ -17,9 +18,13 @@ class WorkerServicer(worker_pb2_grpc.WorkerServiceServicer):
             script = self.model.generate_script(request.prompt)
             script_url = self.storage.upload_script(script, request.task_id)
             self.logger.info(f"Script generated and saved for task {request.task_id}")
-            return worker_pb2.GenerateManimScriptResponse(task_id=request.task_id, script=script, script_url=script_url)
+            return worker_pb2.GenerateManimScriptResponse(
+                task_id=request.task_id, script=script, script_url=script_url
+            )
         except Exception as e:
-            self.logger.error(f"Error generating script for task {request.task_id}: {str(e)}")
+            self.logger.error(
+                f"Error generating script for task {request.task_id}: {str(e)}"
+            )
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"Error generating script: {str(e)}")
             return worker_pb2.GenerateManimScriptResponse()
@@ -35,12 +40,12 @@ class WorkerServicer(worker_pb2_grpc.WorkerServiceServicer):
                 task_id=request.task_id,
                 success=True,
                 video_url=video_url,
-                script_url=script_url
+                script_url=script_url,
             )
         except Exception as e:
-            self.logger.error(f"Error generating video for task {request.task_id}: {str(e)}")
+            self.logger.error(
+                f"Error generating video for task {request.task_id}: {str(e)}"
+            )
             return worker_pb2.GenerateManimVideoResponse(
-                task_id=request.task_id,
-                success=False,
-                error_message=str(e)
+                task_id=request.task_id, success=False, error_message=str(e)
             )
