@@ -12,6 +12,6 @@ type VideoRepository interface {
 	Update(ctx context.Context, video *domain.Video) error
 }
 
-type NewMemoryVideoRepository struct {
-	videos map[string]*domain.Video
-}
+// type NewMemoryVideoRepository struct {
+// 	videos map[string]*domain.Video
+// }

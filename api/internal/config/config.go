@@ -37,7 +37,7 @@ func LoadConfig() (*Config, error) {
 	}
 
 	// Environment variables for other configurations
-	cfg.WorkerAddr = getEnv("WORKER_ADDR", "localhost:50052")
+	cfg.WorkerAddr = getEnv("WORKER_ADDR", "worker:50052")
 	cfg.ServerPort = getEnv("SERVER_PORT", "50051")
 	cfg.LogLevel = getEnv("LOG_LEVEL", "info")
 
