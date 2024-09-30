@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Config:
     def __init__(self):
         # サーバー設定
@@ -11,7 +12,9 @@ class Config:
 
         # ストレージ設定
         self.storage_type: str = os.getenv("STORAGE_TYPE", "local")
-        self.local_storage_path: str = os.getenv("LOCAL_STORAGE_PATH", "/tmp/text2manim")
+        self.local_storage_path: str = os.getenv(
+            "LOCAL_STORAGE_PATH", "/tmp/text2manim"
+        )
 
         # クラウドストレージ設定 (GCP を例として)
         self.gcp_bucket_name: str = os.getenv("GCP_BUCKET_NAME", "")
@@ -51,10 +54,19 @@ class Config:
         if self.storage_type not in ["local", "gcp"]:
             raise ValueError(f"Invalid storage type: {self.storage_type}")
 
-        if self.storage_type == "gcp" and (not self.gcp_bucket_name or not self.gcp_credentials_path):
-            raise ValueError("GCP storage selected but bucket name or credentials path is missing")
+        if self.storage_type == "gcp" and (
+            not self.gcp_bucket_name or not self.gcp_credentials_path
+        ):
+            raise ValueError(
+                "GCP storage selected but bucket name or credentials path is missing"
+            )
 
-        if self.manim_quality not in ["low_quality", "medium_quality", "high_quality", "production_quality"]:
+        if self.manim_quality not in [
+            "low_quality",
+            "medium_quality",
+            "high_quality",
+            "production_quality",
+        ]:
             raise ValueError(f"Invalid Manim quality: {self.manim_quality}")
 
         if self.log_level not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
@@ -86,6 +98,7 @@ class Config:
         Log File: {self.log_file}
         Allowed IPs: {', '.join(self.allowed_ips) if self.allowed_ips else 'All'}
         """
+
 
 # 使用例
 if __name__ == "__main__":
