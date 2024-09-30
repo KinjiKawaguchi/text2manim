@@ -32,8 +32,6 @@ jobs:
         with:
           args: 'format --check'
           src: './api'
-      - name: Sync Rye
-        run: rye sync
 
   buf-lint:
     name: lint-protobuf
