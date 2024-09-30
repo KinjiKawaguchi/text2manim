@@ -80,7 +80,8 @@ func (am *AuthMiddleware) checkAPIKey(ctx context.Context) error {
 	apiKey := apiKeys[0]
 	if serviceInfo, exists := am.config.APIKeys[apiKey]; exists {
 		// ここで必要に応じて追加の権限チェックを行うことができます
-		ctx = context.WithValue(ctx, "service", serviceInfo.Service)
+		// ctx = context.WithValue(ctx, "service", serviceInfo.Service)
+		_ = serviceInfo
 		return nil
 	}
 
