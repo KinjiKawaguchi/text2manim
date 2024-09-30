@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"net"
+	"os"
 
 	"github.com/KinjiKawaguchi/text2manim/api/internal/config"
 	"github.com/KinjiKawaguchi/text2manim/api/internal/infrastructure/grpc/handler"
@@ -16,21 +17,25 @@ import (
 )
 
 func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+	slog.SetDefault(logger)
+
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
+		logger.Error("Failed to load config", "error", err)
+		os.Exit(1)
 	}
 
-	repo := repository.NewMemoryVideoRepository()
-	workerClient, err := worker.NewGRPCWorkerClient(cfg.WorkerAddr)
+	repo := repository.NewMemoryVideoRepository(logger)
+	workerClient, err := worker.NewGRPCWorkerClient(cfg.WorkerAddr, logger)
 	if err != nil {
-		log.Fatalf("Failed to create worker client: %v", err)
+		logger.Error("Failed to create worker client", "error", err)
+		os.Exit(1)
 	}
 
-	useCase := usecase.NewVideoGeneratorUseCase(repo, workerClient)
-	handler := handler.NewHandler(useCase)
-
-	authMiddleware := middleware.NewAuthMiddleware(cfg)
+	useCase := usecase.NewVideoGeneratorUseCase(repo, workerClient, logger)
+	handler := handler.NewHandler(useCase, logger)
+	authMiddleware := middleware.NewAuthMiddleware(cfg, logger)
 
 	server := grpc.NewServer(
 		grpc.UnaryInterceptor(authMiddleware.UnaryInterceptor()),
@@ -41,11 +46,13 @@ func main() {
 
 	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", cfg.ServerPort))
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		logger.Error("Failed to listen", "error", err, "port", cfg.ServerPort)
+		os.Exit(1)
 	}
 
-	log.Printf("Server started on %s", cfg.ServerPort)
+	logger.Info("Server started", "port", cfg.ServerPort)
 	if err := server.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve: %v", err)
+		logger.Error("Failed to serve", "error", err)
+		os.Exit(1)
 	}
 }
