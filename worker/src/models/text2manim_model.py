@@ -24,8 +24,8 @@ class Text2ManimModel:
             response: ChatCompletion = self.client.chat.completions.create(
                 model=self.config.openai_model,
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant that generates Manim scripts."},
-                    {"role": "user", "content": f"Generate a Manim script for the following prompt: {prompt}"}
+                    {"role": "system", "content": "You are a helpful assistant that generates Manim scripts.All output must be in a form that can be executed, so if you are outputting natural language, please comment it out or take other measures.Markdown is also not allowed.(BAD example: ```python code ```)"},
+                    {"role": "user", "content": f"Generate a Manim script for the following prompt: {prompt}.Markdown is not allowed.(BAD example: ```python code ```)"}
                 ],
                 max_tokens=self.config.openai_max_tokens,
                 temperature=self.config.openai_temperature,
