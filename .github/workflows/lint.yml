@@ -26,8 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # ryeのセットアップ
-      - uses: sksat/setup-rye@v0.22.0
+      - uses: sksat/setup-rye@v0.29.0
       # ruffのセットアップ
       - uses: chartboost/ruff-action@v1
         with:
