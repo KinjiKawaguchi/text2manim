@@ -31,6 +31,7 @@ jobs:
       - uses: chartboost/ruff-action@v1
         with:
           args: 'format --check'
+          src: './api'
       - name: Sync Rye
         run: rye sync
 
