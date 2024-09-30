@@ -17,7 +17,9 @@ class Text2ManimModel:
         else:
             self.device = "cuda" if torch.cuda.is_available() else "cpu"
             self.tokenizer = AutoTokenizer.from_pretrained(config.model_name)
-            self.model = AutoModelForCausalLM.from_pretrained(config.model_name).to(self.device)
+            self.model = AutoModelForCausalLM.from_pretrained(config.model_name).to(
+                self.device
+            )
 
     def _generate_script_openai(self, prompt: str) -> Optional[str]:
         try:
@@ -26,6 +28,7 @@ class Text2ManimModel:
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that generates Manim scripts.All output must be in a form that can be executed, so if you are outputting natural language, please comment it out or take other measures.Markdown is also not allowed.(BAD example: ```python code ```)"},
                     {"role": "user", "content": f"Generate a Manim script for the following prompt: {prompt}.Markdown is not allowed.(BAD example: ```python code ```)"}
+
                 ],
                 max_tokens=self.config.openai_max_tokens,
                 temperature=self.config.openai_temperature,
@@ -58,7 +61,7 @@ class Text2ManimModel:
                 temperature=0.7,
                 top_k=50,
                 top_p=0.95,
-                do_sample=True
+                do_sample=True,
             )
 
         # 生成されたスクリプトのデコード
@@ -68,7 +71,6 @@ class Text2ManimModel:
         script = generated_script.split("Makim script:")[-1].strip()
 
         return script
-
 
     def generate_script(self, prompt):
         if self.config.use_openai:

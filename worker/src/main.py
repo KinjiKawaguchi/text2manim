@@ -8,6 +8,7 @@ from src.worker.worker import WorkerServicer
 from src.config import Config
 from src.utils.logger import setup_logger
 
+
 def serve():
     logger = setup_logger()
     config = Config()
