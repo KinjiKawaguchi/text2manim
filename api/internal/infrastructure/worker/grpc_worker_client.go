@@ -18,7 +18,7 @@ type GRPCWorkerClient struct {
 
 func NewGRPCWorkerClient(address string, logger *slog.Logger) (*GRPCWorkerClient, error) {
 	logger.Info("Connecting to worker", "address", address)
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Error("Failed to connect to worker", "error", err)
 		return nil, fmt.Errorf("failed to connect to worker: %w", err)
