@@ -1,14 +1,48 @@
-# Video Generator API
+# Text2Manim: Video Generator API
 
-This project provides an API for generating videos using LLM and Manim.
+## プロジェクト概要
 
-## Setup
+Text2Manimは、大規模言語モデル（LLM）とManimを使用して、テキスト入力から自動的に数学的なアニメーションビデオを生成するAPIを提供するプロジェクトです。Docker Composeを使用して簡単にセットアップと実行が可能です。
 
+主な特徴：
+- テキスト入力からManimコードを自動生成
+- 生成されたManimコードからビデオアニメーションを作成
+- RESTful APIによる簡単な統合
+- Docker Composeによる簡単なデプロイ
 
-クローンする
-https://github.com/KinjiKawaguchi/text2manim.git
-api/config/config.yamlを設定する。
-デフォルトは
+## セットアップ
+
+### 前提条件
+
+- Docker
+- Docker Compose
+- Git
+
+### セットアップ手順
+
+1. リポジトリをクローンします：
+   ```
+   git clone https://github.com/KinjiKawaguchi/text2manim.git
+   cd text2manim
+   ```
+
+2. 設定ファイルを準備します：
+   - `api/config/config.yaml.example` を `api/config/config.yaml` にコピーし、必要に応じて編集します。
+   - `worker/.env.example` を `worker/.env` にコピーし、必要な環境変数を設定します。
+
+3. Dockerイメージをビルドし、コンテナを起動します：
+   ```
+   docker-compose up --build
+   ```
+
+これで、APIサーバーとワーカーが起動し、サービスの利用準備が整います。
+
+## 設定
+
+### api/config/config.yaml
+
+このファイルでは、APIキーと許可するIPアドレスを設定します。
+
 ```yaml
 api_keys:
   key1:
@@ -17,98 +51,59 @@ api_keys:
   key2:
     service: 'service2'
     permissions: ['read']
-
 ip_whitelist:
   - '192.168.1.0/24'
   - '10.0.0.1'
   - '172.18.0.4'
 ```
 
-api_keysには、APIキーとサービス名、権限を設定する。
-ip_whitelistには、許可するIPアドレスを設定する。
+### worker/.env
 
-/worker/.env.exampleを.envにリネームして、設定する。
-```
-# .env.example
+このファイルでは、ワーカーの設定を行います。主な設定項目は以下の通りです：
 
-# Server Settings
-WORKER_PORT=50052
+- `WORKER_PORT`: ワーカーのポート番号
+- `STORAGE_TYPE`: ストレージタイプ（local または gcp）
+- `USE_OPENAI`: OpenAI APIを使用するかどうか
+- `MODEL_NAME`: 使用する言語モデルの名前
+- `MANIM_QUALITY`: Manimの出力品質
+- `LOG_LEVEL`: ログレベル
 
-# Storage Settings
-STORAGE_TYPE=local
-LOCAL_STORAGE_PATH=/tmp/text2manim
+詳細な設定オプションについては、`.env.example` ファイルを参照してください。
 
-# GCP Storage Settings (if using GCP)
-GCP_BUCKET_NAME=your-bucket-name
-GCP_CREDENTIALS_PATH=/path/to/your/service-account-key.json
+## 使用方法
 
-# OpenAI Settings
-USE_OPENAI=false
-OPENAI_API_KEY=your-openai-api-key
-OPENAI_MODEL=gpt-4o
+APIを使用してビデオを生成するには、以下のようにcurlコマンドを使用してPOSTリクエストを送信します：
 
-# # Hugging Face Model Settings
-# HF_MODEL_NAME=your-username/your-model-name
-# HF_TOKEN=your_huggingface_api_token
-# HF_CACHE_DIR=/path/to/huggingface/cache
-
-# Model Generation Settings
-MODEL_NAME=your-username/your-model-name
-MODEL_MAX_LENGTH=1000
-MODEL_TEMPERATURE=0.7
-MODEL_TOP_K=50
-MODEL_TOP_P=0.95
-
-# Manim Settings
-MANIM_QUALITY=medium_quality
-MANIM_OUTPUT_FILE=scene.mp4
-
-# Logging Settings
-LOG_LEVEL=INFO
-LOG_FILE=/path/to/log/file.log
-
-# Security Settings
-ALLOWED_IPS=127.0.0.1,192.168.1.0/24
+```bash
+curl -X POST http://localhost:8080/v1/generations \
+     -H "Content-Type: application/json" \
+     -H "x-api-key: key1" \
+     -d '{"prompt": "比例と反比例について説明する動画を作成してください。"}'
 ```
 
-STORAGE_TYPEには、localかgcpを設定する。
-LOCAL_STORAGE_PATHには、ローカルの保存先を設定する。
-GCPの場合は、GCP_BUCKET_NAMEとGCP_CREDENTIALS_PATHを設定する。
+成功した場合、APIは生成されたビデオのURLを含むレスポンスを返します。
 
-USE_OPENAIには、OpenAIを使うかどうかを設定する。
-OPENAI_API_KEYには、OpenAIのAPIキーを設定する。
-OPENAI_MODELには、OpenAIのモデルを設定する。
+## 開発
 
-MODEL_NAMEには、Hugging Faceのモデルを設定する。
-MODEL_MAX_LENGTHには、最大の長さを設定する。
-MODEL_TEMPERATUREには、温度を設定する。
-MODEL_TOP_Kには、トップKを設定する。
-MODEL_TOP_Pには、トップPを設定する。
+開発者向けの情報は[CONTRIBUTING.md](CONTRIBUTING.md)を参照してください。
 
-MANIM_QUALITYには、Manimの品質を設定する。
-MANIM_OUTPUT_FILEには、出力ファイル名を設定する。
+## トラブルシューティング
 
-LOG_LEVELには、ログレベルを設定する。
-LOG_FILEには、ログファイルのパスを設定する。
+- **Q: Dockerコンテナが起動しない**
+  A: Docker及びDocker Composeが正しくインストールされているか確認してください。また、ポートの競合がないか確認してください。
 
-ALLOWED_IPSには、許可するIPアドレスを設定する。
+- **Q: APIにアクセスできない**
+  A: `api/config/config.yaml`の`ip_whitelist`設定を確認し、クライアントのIPアドレスが許可されているか確認してください。
 
+- **Q: ビデオ生成に失敗する**
+  A: `docker-compose logs worker`コマンドでワーカーのログを確認し、エラーメッセージを確認してください。
 
+問題が発生した場合は、[GitHub Issues](https://github.com/KinjiKawaguchi/text2manim/issues)をご確認ください。同様の問題がすでに報告されているかもしれません。新しい問題を見つけた場合は、イシューを作成してください。
 
-## Usage
+## コントリビューション
 
-1. Start the API server: `./bin/api`
-2. Start the worker: `python worker/main.py`
-3. Send requests to `http://localhost:8080/v1/generations`
+プロジェクトへの貢献を歓迎します！詳細は[CONTRIBUTING.md](CONTRIBUTING.md)を参照してください。
 
-## Development
+## ライセンス
 
-- Run tests: `make test`
-- Generate protobuf: `make proto`
-- Lint code: `make lint`
-
-For more details, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+このプロジェクトはMITライセンスの下で公開されています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
