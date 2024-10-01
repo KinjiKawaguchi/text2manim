@@ -28,26 +28,27 @@ jobs:
         id: worker_push
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: worker/Dockerfile
+          context: worker
+          file: Dockerfile
           push: true
-          tags: my-docker-hub-namespace/my-docker-hub-repository:worker-${{ github.sha }}
+          tags: kawakin0310/text2manim:worker-${{ github.sha }}
       
       # api/Dockerfile.gatewayをビルドしてプッシュ
       - name: Build and push api gateway Docker image
         id: gateway_push
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: api/Dockerfile.gateway
+          context: api
+          file: Dockerfile.gateway
           push: true
-          tags: my-docker-hub-namespace/my-docker-hub-repository:gateway-${{ github.sha }}
+          tags: kawakin0310/text2manim:gateway-${{ github.sha }}
       
       # api/Dockerfile.grpcをビルドしてプッシュ
       - name: Build and push api grpc Docker image
         id: grpc_push
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: api/Dockerfile.grpc
+          context: api
+          file: Dockerfile.grpc
           push: true
+          tags: kawakin0310/text2manim:grpc-${{ github.sha }}
