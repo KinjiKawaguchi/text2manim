@@ -5,6 +5,7 @@
 Text2Manimは、大規模言語モデル（LLM）とManimを使用して、テキスト入力から自動的に数学的なアニメーションビデオを生成するAPIを提供するプロジェクトです。Docker Composeを使用して簡単にセットアップと実行が可能です。
 
 主な特徴：
+
 - テキスト入力からManimコードを自動生成
 - 生成されたManimコードからビデオアニメーションを作成
 - RESTful APIによる簡単な統合
@@ -21,14 +22,16 @@ Text2Manimは、大規模言語モデル（LLM）とManimを使用して、テ�
 ### セットアップ手順
 
 1. リポジトリをクローンします：
+
    ```
    git clone https://github.com/KinjiKawaguchi/text2manim.git
    cd text2manim
    ```
-   
+
 2. 設定ファイルを準備します：
    - `api/config/config.yaml` を必要に応じて編集します。
      デフォルトの設定:
+
      ```yaml
      api_keys:
        key1:
@@ -42,12 +45,15 @@ Text2Manimは、大規模言語モデル（LLM）とManimを使用して、テ�
        - '10.0.0.1'
        - '172.18.0.4'
      ```
+
      注意: 実運用環境では、セキュリティのためにAPIキーを変更することを強く推奨します。
 
    - `worker/.env.example` を `worker/.env` にコピーし、必要な環境変数を設定します。
+
      ```
      cp worker/.env.example worker/.env
      ```
+
      設定項目:
      a. サーバー設定:
      - `WORKER_PORT`: ワーカーのポート番号（デフォルト: 50052）
@@ -92,6 +98,7 @@ Text2Manimは、大規模言語モデル（LLM）とManimを使用して、テ�
      - 実運用環境では`ALLOWED_IPS`を適切に設定してください。
 
 3. Dockerイメージをビルドし、コンテナを起動します：
+
    ```
    docker-compose up --build
    ```
