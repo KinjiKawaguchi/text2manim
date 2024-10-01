@@ -1,6 +1,5 @@
 import grpc
 from concurrent import futures
-import logging
 import signal
 import sys
 from src.generated.proto.text2manim.v1 import worker_pb2_grpc
@@ -16,8 +15,9 @@ def serve():
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     worker_pb2_grpc.add_WorkerServiceServicer_to_server(
-        WorkerServicer(config, logger), server)
-    server.add_insecure_port(f'[::]:{config.worker_port}')
+        WorkerServicer(config, logger), server
+    )
+    server.add_insecure_port(f"[::]:{config.worker_port}")
 
     def graceful_shutdown(signum, frame):
         logger.info("Received shutdown signal. Stopping server...")
@@ -33,5 +33,6 @@ def serve():
     logger.info(f"Worker server started on port {config.worker_port}")
     server.wait_for_termination()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     serve()
