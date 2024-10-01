@@ -33,6 +33,7 @@ RUN uv pip install --no-cache --system -r requirements.lock
 # アプリケーションのソースコードをコピー
 COPY src /app/src
 COPY .env /app/.env
+COPY secrets /app/secrets
 RUN mkdir /tmp/text2manim
 
 # ポート50052を開放
