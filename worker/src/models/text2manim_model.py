@@ -1,3 +1,4 @@
+import shutil
 import manim
 import tempfile
 import os
@@ -79,7 +80,8 @@ class Text2ManimModel:
             return self._generate_script_local(prompt)
 
     def generate_video(self, script):
-        with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir = tempfile.mkdtemp()
+        try:
             script_path = os.path.join(tmpdir, "scene.py")
             with open(script_path, "w") as f:
                 f.write(script)
@@ -91,3 +93,6 @@ class Text2ManimModel:
                 return output_file
             else:
                 raise Exception("Failed to generate video")
+        except Exception as e:
+            shutil.rmtree(tmpdir)
+            raise e
