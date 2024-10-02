@@ -29,7 +29,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: worker
-          file: Dockerfile
+          file: worker/Dockerfile
           push: true
           tags: kawakin0310/text2manim:worker-${{ github.sha }}
       
@@ -39,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: api
-          file: Dockerfile.gateway
+          file: api/Dockerfile.gateway
           push: true
           tags: kawakin0310/text2manim:gateway-${{ github.sha }}
       
@@ -49,6 +49,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: api
-          file: Dockerfile.grpc
+          file: api/Dockerfile.grpc
           push: true
           tags: kawakin0310/text2manim:grpc-${{ github.sha }}
