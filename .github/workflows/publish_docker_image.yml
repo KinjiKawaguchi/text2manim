@@ -22,13 +22,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set repository owner to lowercase
+        run: echo "REPO_OWNER_LOWER=$(echo $GITHUB_REPOSITORY_OWNER | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Build and push worker Docker image
         uses: docker/build-push-action@v3
         with:
           context: worker
           file: worker/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/text2manim/worker:${{ github.sha }}
+          tags: ghcr.io/${{ env.REPO_OWNER_LOWER }}/text2manim/worker:${{ github.sha }}
 
       - name: Build and push api gateway Docker image
         uses: docker/build-push-action@v3
@@ -36,7 +39,7 @@ jobs:
           context: api
           file: api/Dockerfile.gateway
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/text2manim/gateway:${{ github.sha }}
+          tags: ghcr.io/${{ env.REPO_OWNER_LOWER }}/text2manim/gateway:${{ github.sha }}
 
       - name: Build and push api grpc Docker image
         uses: docker/build-push-action@v3
@@ -44,4 +47,4 @@ jobs:
           context: api
           file: api/Dockerfile.grpc
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/text2manim/grpc:${{ github.sha }}
+          tags: ghcr.io/${{ env.REPO_OWNER_LOWER }}/text2manim/grpc:${{ github.sha }}
