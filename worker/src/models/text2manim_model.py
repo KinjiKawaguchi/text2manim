@@ -1,4 +1,4 @@
-import manim
+import shutil
 import tempfile
 import os
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -26,9 +26,14 @@ class Text2ManimModel:
             response: ChatCompletion = self.client.chat.completions.create(
                 model=self.config.openai_model,
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant that generates Manim scripts.All output must be in a form that can be executed, so if you are outputting natural language, please comment it out or take other measures.Markdown is also not allowed.(BAD example: ```python code ```)"},
-                    {"role": "user", "content": f"Generate a Manim script for the following prompt: {prompt}.Markdown is not allowed.(BAD example: ```python code ```)"}
-
+                    {
+                        "role": "system",
+                        "content": "You are a helpful assistant that generates Manim scripts.All output must be in a form that can be executed, so if you are outputting natural language, please comment it out or take other measures.Markdown is also not allowed.(BAD example: ```python code ```)",
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Generate a Manim script for the following prompt: {prompt}.Markdown is not allowed.(BAD example: ```python code ```)",
+                    },
                 ],
                 max_tokens=self.config.openai_max_tokens,
                 temperature=self.config.openai_temperature,
@@ -79,7 +84,8 @@ class Text2ManimModel:
             return self._generate_script_local(prompt)
 
     def generate_video(self, script):
-        with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir = tempfile.mkdtemp()
+        try:
             script_path = os.path.join(tmpdir, "scene.py")
             with open(script_path, "w") as f:
                 f.write(script)
@@ -91,3 +97,6 @@ class Text2ManimModel:
                 return output_file
             else:
                 raise Exception("Failed to generate video")
+        except Exception as e:
+            shutil.rmtree(tmpdir)
+            raise e

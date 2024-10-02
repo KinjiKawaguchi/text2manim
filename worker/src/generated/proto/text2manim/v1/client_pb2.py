@@ -19,8 +19,6 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
-from google.api import httpbody_pb2 as google_dot_api_dot_httpbody__pb2
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
