@@ -1,0 +1,35 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.grpc
+    ports:
+      - "50051:50051"
+    environment:
+      - CONFIG_FILE=/root/config/config.yaml
+    volumes:
+      - ./api/config:/root/config
+
+  gateway:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    ports:
+      - "50052:50052"
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - ./worker/.env:/app/.env
+
+networks:
+  default:
+    name: text2manim-network

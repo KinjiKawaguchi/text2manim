@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package text2manim.v1;
+
+option go_package = "github.com/KinjiKawaguchi/text2manim/api/pkg/text2manim/v1;text2manim_v1";
+
+service WorkerService {
+    rpc GenerateManimScript(GenerateManimScriptRequest) returns (GenerateManimScriptResponse) {}
+    rpc GenerateManimVideo(GenerateManimVideoRequest) returns (GenerateManimVideoResponse) {}
+  }
+
+message GenerateManimScriptRequest {
+  string task_id = 1;
+  string prompt = 2;
+}
+
+message GenerateManimScriptResponse {
+  string task_id = 1;
+  string script = 2;
+  string script_url = 3;
+}
+
+message GenerateManimVideoRequest {
+  string task_id = 1;
+  string script = 2;
+}
+
+message GenerateManimVideoResponse {
+  string task_id = 1;
+  bool success = 2;
+  string video_url = 3;
+  string script_url = 5;
+  string error_message = 4;
+}
