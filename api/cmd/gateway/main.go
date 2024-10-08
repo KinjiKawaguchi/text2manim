@@ -2,13 +2,12 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
 
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	pb "github.com/KinjiKawaguchi/text2manim/api/pkg/pb/text2manim/v1"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -16,7 +15,7 @@ import (
 const grpcServerAddress = "api:50051"
 
 func main() {
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: logLevel}))
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	slog.SetDefault(logger)
 
 	ctx := context.Background()
