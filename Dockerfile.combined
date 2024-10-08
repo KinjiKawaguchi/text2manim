@@ -1,0 +1,75 @@
+# Go builder stage
+FROM golang:1.23.1 as go-builder
+
+WORKDIR /app
+
+# Build gRPC API
+COPY api/go.mod api/go.sum ./
+RUN go mod download
+
+COPY api .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /text2manim-api ./cmd/server
+
+# Build Gateway
+COPY api/go.mod api/go.sum ./
+RUN go mod download
+
+COPY api .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /text2manim-gateway ./cmd/gateway
+
+# Python builder stage
+FROM python:3.12-slim AS python-builder
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    texlive-base \
+    texlive-latex-extra \
+    pkg-config \
+    libcairo2-dev \
+    build-essential \
+    libpango1.0-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig:$PKG_CONFIG_PATH"
+ENV PYTHONPATH=/app:/app/src:$PYTHONPATH
+
+RUN pip install --no-cache-dir pycairo uv
+
+COPY worker/pyproject.toml worker/requirements.lock* worker/README.md /app/
+RUN uv pip install --no-cache --system -r requirements.lock
+
+COPY worker /app/
+
+# Final stage
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Copy necessary files from previous stages
+COPY --from=go-builder /text2manim-api /app/
+COPY --from=go-builder /text2manim-gateway /app/
+COPY --from=python-builder /app /app/
+COPY --from=go-builder /app/config/config.yaml /app/config/config.yaml
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    texlive-base \
+    texlive-latex-extra \
+    libcairo2 \
+    libpango1.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Expose necessary ports
+EXPOSE 50051 50052 8080
+
+# Create a startup script
+RUN echo '#!/bin/bash\n\
+/app/text2manim-api &\n\
+/app/text2manim-gateway &\n\
+python -m src.main\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
+CMD ["/app/start.sh"]
