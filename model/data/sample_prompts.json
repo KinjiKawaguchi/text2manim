@@ -1,35 +1,68 @@
- [
+[
     {
-        "prompt": "二次関数のグラフを描き、その頂点と軸を示してください。"
+        "prompt": {
+            "jp": "二次関数のグラフを描き、その頂点と軸を示してください。",
+            "en": "Draw the graph of a quadratic function and indicate its vertex and axis."
+        }
     },
     {
-        "prompt": "一次方程式の解き方をステップバイステップで示してください。"
+        "prompt": {
+            "jp": "一次方程式の解き方をステップバイステップで示してください。",
+            "en": "Show the step-by-step process of solving a linear equation."
+        }
     },
     {
-        "prompt": "ピタゴラスの定理の証明をアニメーションで示してください。"
+        "prompt": {
+            "jp": "ピタゴラスの定理の証明をアニメーションで示してください。",
+            "en": "Demonstrate the proof of the Pythagorean theorem using animation."
+        }
     },
     {
-        "prompt": "円の面積の公式を視覚的に説明してください。"
+        "prompt": {
+            "jp": "円の面積の公式を視覚的に説明してください。",
+            "en": "Visually explain the formula for the area of a circle."
+        }
     },
     {
-        "prompt": "サイン波とコサイン波のグラフを重ねて描き、その位相差を示してください。"
+        "prompt": {
+            "jp": "サイン波とコサイン波のグラフを重ねて描き、その位相差を示してください。",
+            "en": "Draw overlapping graphs of sine and cosine waves, and show their phase difference."
+        }
     },
     {
-        "prompt": "ベクトルの加法と減法を図を使って説明してください。"
+        "prompt": {
+            "jp": "ベクトルの加法と減法を図を使って説明してください。",
+            "en": "Explain vector addition and subtraction using diagrams."
+        }
     },
     {
-        "prompt": "微分の概念を導入し、曲線の接線を描いてください。"
+        "prompt": {
+            "jp": "微分の概念を導入し、曲線の接線を描いてください。",
+            "en": "Introduce the concept of differentiation and draw a tangent line to a curve."
+        }
     },
     {
-        "prompt": "確率の基本を説明するために、コイン投げのシミュレーションを行ってください。"
+        "prompt": {
+            "jp": "確率の基本を説明するために、コイン投げのシミュレーションを行ってください。",
+            "en": "Conduct a coin toss simulation to explain the basics of probability."
+        }
     },
     {
-        "prompt": "DNAの二重らせん構造を描き、その主要な特徴を説明してください。"
+        "prompt": {
+            "jp": "DNAの二重らせん構造を描き、その主要な特徴を説明してください。",
+            "en": "Draw the double helix structure of DNA and explain its main features."
+        }
     },
     {
-        "prompt": "ニュートンの運動の第1法則を実例を用いて説明してください。"
+        "prompt": {
+            "jp": "ニュートンの運動の第1法則を実例を用いて説明してください。",
+            "en": "Explain Newton's First Law of Motion using practical examples."
+        }
     },
     {
-        "prompt": "一次方程式の解き方をステップバイステップで示してください。"
+        "prompt": {
+            "jp": "一次方程式の解き方をステップバイステップで示してください。",
+            "en": "Show the step-by-step process of solving a linear equation."
+        }
     }
 ]
