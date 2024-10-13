@@ -27,7 +27,7 @@ func NewPostgresVideoRepository(cfg *config.Config, logger *slog.Logger) (*Postg
 	}
 
 	// Auto Migrate
-	err = db.AutoMigrate(&domain.Video{})
+	err = db.AutoMigrate(&domain.Generation{})
 	if err != nil {
 		return nil, err
 	}
@@ -35,8 +35,8 @@ func NewPostgresVideoRepository(cfg *config.Config, logger *slog.Logger) (*Postg
 	return &PostgresVideoRepository{db: db, logger: logger}, nil
 }
 
-func (r *PostgresVideoRepository) FindByID(ctx context.Context, id string) (*domain.Video, error) {
-	var video domain.Video
+func (r *PostgresVideoRepository) FindByID(ctx context.Context, id string) (*domain.Generation, error) {
+	var video domain.Generation
 	result := r.db.First(&video, "id = ?", id)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
@@ -47,12 +47,12 @@ func (r *PostgresVideoRepository) FindByID(ctx context.Context, id string) (*dom
 	return &video, nil
 }
 
-func (r *PostgresVideoRepository) Save(ctx context.Context, video *domain.Video) error {
+func (r *PostgresVideoRepository) Save(ctx context.Context, video *domain.Generation) error {
 	result := r.db.Create(video)
 	return result.Error
 }
 
-func (r *PostgresVideoRepository) Update(ctx context.Context, video *domain.Video) error {
+func (r *PostgresVideoRepository) Update(ctx context.Context, video *domain.Generation) error {
 	result := r.db.Save(video)
 	return result.Error
 }

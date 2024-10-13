@@ -9,9 +9,9 @@ import (
 )
 
 type VideoRepository interface {
-	Save(ctx context.Context, video *domain.Video) error
-	FindByID(ctx context.Context, id string) (*domain.Video, error)
-	Update(ctx context.Context, video *domain.Video) error
+	Save(ctx context.Context, video *domain.Generation) error
+	FindByID(ctx context.Context, id string) (*domain.Generation, error)
+	Update(ctx context.Context, video *domain.Generation) error
 }
 
 type VideoRepositoryFactory func(cfg *config.Config, logger *slog.Logger) (VideoRepository, error)
