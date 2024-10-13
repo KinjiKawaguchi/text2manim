@@ -26,7 +26,22 @@ func main() {
 		os.Exit(1)
 	}
 
-	repo := repository.NewMemoryVideoRepository(logger)
+	// 新しいリポジトリファクトリー関数を使用
+	repo, err := repository.NewVideoRepository(cfg, logger)
+	if err != nil {
+		logger.Error("Failed to create video repository", "error", err)
+		os.Exit(1)
+	}
+
+	// PostgreSQLを使用している場合、アプリケーション終了時にDBコネクションを閉じる
+	if closer, ok := repo.(interface{ Close() error }); ok {
+		defer func() {
+			if err := closer.Close(); err != nil {
+				logger.Error("Failed to close database connection", "error", err)
+			}
+		}()
+	}
+
 	workerClient, err := worker.NewGRPCWorkerClient(cfg.WorkerAddr, logger)
 	if err != nil {
 		logger.Error("Failed to create worker client", "error", err)
@@ -41,7 +56,6 @@ func main() {
 		grpc.UnaryInterceptor(authMiddleware.UnaryInterceptor()),
 		grpc.StreamInterceptor(authMiddleware.StreamInterceptor()),
 	)
-
 	pb.RegisterText2ManimServiceServer(server, handler)
 
 	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", cfg.ServerPort))

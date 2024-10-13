@@ -2,7 +2,9 @@ package repository
 
 import (
 	"context"
+	"log/slog"
 
+	"github.com/KinjiKawaguchi/text2manim/api/internal/config"
 	"github.com/KinjiKawaguchi/text2manim/api/internal/domain"
 )
 
@@ -12,6 +14,4 @@ type VideoRepository interface {
 	Update(ctx context.Context, video *domain.Video) error
 }
 
-// type NewMemoryVideoRepository struct {
-// 	videos map[string]*domain.Video
-// }
+type VideoRepositoryFactory func(cfg *config.Config, logger *slog.Logger) (VideoRepository, error)
