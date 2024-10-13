@@ -48,7 +48,6 @@ COPY worker /app/
 # Copy Go binaries from go-builder stage
 COPY --from=go-builder /text2manim-api /app/
 COPY --from=go-builder /text2manim-gateway /app/
-COPY --from=go-builder /app/config/config.yaml /app/config/config.yaml
 
 # Expose necessary ports
 EXPOSE 50051 50052 8080
