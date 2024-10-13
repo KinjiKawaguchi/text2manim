@@ -21,6 +21,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // Suppress "imported and not used" errors
@@ -30,6 +31,24 @@ var _ status.Status
 var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
+
+func request_Text2ManimService_HealthCheck_0(ctx context.Context, marshaler runtime.Marshaler, client Text2ManimServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq emptypb.Empty
+	var metadata runtime.ServerMetadata
+
+	msg, err := client.HealthCheck(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Text2ManimService_HealthCheck_0(ctx context.Context, marshaler runtime.Marshaler, server Text2ManimServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq emptypb.Empty
+	var metadata runtime.ServerMetadata
+
+	msg, err := server.HealthCheck(ctx, &protoReq)
+	return msg, metadata, err
+
+}
 
 func request_Text2ManimService_CreateGeneration_0(ctx context.Context, marshaler runtime.Marshaler, client Text2ManimServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreateGenerationRequest
@@ -150,6 +169,31 @@ func request_Text2ManimService_StreamGenerationStatus_0(ctx context.Context, mar
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterText2ManimServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server Text2ManimServiceServer) error {
 
+	mux.Handle("GET", pattern_Text2ManimService_HealthCheck_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/text2manim.v1.Text2ManimService/HealthCheck", runtime.WithHTTPPathPattern("/v1/health"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Text2ManimService_HealthCheck_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Text2ManimService_HealthCheck_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("POST", pattern_Text2ManimService_CreateGeneration_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -248,6 +292,28 @@ func RegisterText2ManimServiceHandler(ctx context.Context, mux *runtime.ServeMux
 // "Text2ManimServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterText2ManimServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client Text2ManimServiceClient) error {
 
+	mux.Handle("GET", pattern_Text2ManimService_HealthCheck_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/text2manim.v1.Text2ManimService/HealthCheck", runtime.WithHTTPPathPattern("/v1/health"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Text2ManimService_HealthCheck_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Text2ManimService_HealthCheck_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("POST", pattern_Text2ManimService_CreateGeneration_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -318,6 +384,8 @@ func RegisterText2ManimServiceHandlerClient(ctx context.Context, mux *runtime.Se
 }
 
 var (
+	pattern_Text2ManimService_HealthCheck_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "health"}, ""))
+
 	pattern_Text2ManimService_CreateGeneration_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "generations"}, ""))
 
 	pattern_Text2ManimService_GetGenerationStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "generations", "request_id"}, ""))
@@ -326,6 +394,8 @@ var (
 )
 
 var (
+	forward_Text2ManimService_HealthCheck_0 = runtime.ForwardResponseMessage
+
 	forward_Text2ManimService_CreateGeneration_0 = runtime.ForwardResponseMessage
 
 	forward_Text2ManimService_GetGenerationStatus_0 = runtime.ForwardResponseMessage

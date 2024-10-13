@@ -116,6 +116,29 @@
           "Text2ManimService"
         ]
       }
+    },
+    "/v1/health": {
+      "get": {
+        "operationId": "Text2ManimService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Text2ManimService"
+        ]
+      }
     }
   },
   "definitions": {
