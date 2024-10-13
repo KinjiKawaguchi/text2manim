@@ -38,13 +38,23 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
 
      設定項目:
 
-     - `API_KEYS`: カンマ区切りの API キーリスト（例: "key1,key2,key3"）
-     - `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト（例: "192.168.1.0/24,10.0.0.1,172.18.0.4"）
-     - `WORKER_ADDR`: ワーカーのアドレス（デフォルト: "worker:50052"）
+     - `API_KEYS`: カンマ区切りの API キーリスト（例: "key1,key2"）
+     - `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト（例: "127.0.0.1,127.0.0.2"）
+     - `WORKER_PORT`: ワーカーのポート（デフォルト: "50052"）
      - `SERVER_PORT`: API サーバーのポート（デフォルト: "50051"）
-     - `LOG_LEVEL`: ログレベル（デフォルト: "info"）
+     - `LOG_LEVEL`: ログレベル（デフォルト: "INFO"）
+     - `DB_TYPE`: データベースタイプ（"postgres" または "memory"）
 
-     注意: 実運用環境では、セキュリティのために API キーを変更することを強く推奨します。
+     postgresを選択した場合の追加設定:
+     - `DB_HOST`: PostgreSQL データベースホスト
+     - `DB_PORT`: PostgreSQL データベースポート
+     - `DB_USER`: PostgreSQL データベースユーザー名
+     - `DB_PASSWORD`: PostgreSQL データベースパスワード
+     - `DB_NAME`: PostgreSQL データベース名
+
+     注意:
+     - 実運用環境では、セキュリティのために API キーとデータベース認証情報を変更することを強く推奨します。
+     - `DB_TYPE` を "memory" に設定した場合、PostgreSQL 関連の設定は無視されます。
 
    - `worker/.env.example` を `worker/.env` にコピーし、必要な環境変数を設定します。
 
@@ -118,13 +128,17 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
 
 このファイルでは、API キーと許可する IP アドレス、その他の API 設定を環境変数として定義します。
 
-```plaintext
-API_KEYS=key1,key2,key3
-IP_WHITELIST=192.168.1.0/24,10.0.0.1,172.18.0.4
-WORKER_ADDR=worker:50052
-SERVER_PORT=50051
-LOG_LEVEL=info
-```
+- `API_KEYS`: カンマ区切りの API キーリスト
+- `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト
+- `WORKER_PORT`: ワーカーのポート番号
+- `SERVER_PORT`: API サーバーのポート番号
+- `LOG_LEVEL`: ログレベル
+- `DB_TYPE`: データベースタイプ（"postgres" または "memory"）
+- `DB_HOST`: PostgreSQL データベースホスト
+- `DB_PORT`: PostgreSQL データベースポート
+- `DB_USER`: PostgreSQL データベースユーザー名
+- `DB_PASSWORD`: PostgreSQL データベースパスワード
+- `DB_NAME`: PostgreSQL データベース名
 
 ### worker/.env
 
