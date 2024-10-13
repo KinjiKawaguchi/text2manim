@@ -3,6 +3,7 @@ package config
 
 import (
 	"errors"
+	"log/slog"
 	"os"
 	"strings"
 
@@ -17,9 +18,12 @@ type Config struct {
 	LogLevel    string
 }
 
-func LoadConfig() (*Config, error) {
+func LoadConfig(logger *slog.Logger) (*Config, error) {
 	// .envファイルを読み込む
-	godotenv.Load()
+	err := godotenv.Load()
+	if err != nil {
+		logger.Warn("Failed to load .env file", "error", err)
+	}
 
 	cfg := &Config{
 		APIKeys:     strings.Split(getEnv("API_KEYS", ""), ","),
