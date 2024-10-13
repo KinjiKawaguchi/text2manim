@@ -10,13 +10,13 @@ import (
 )
 
 type MemoryVideoRepository struct {
-	videos map[string]*domain.Video
+	videos map[string]*domain.Generation
 	mu     sync.RWMutex
 	logger *slog.Logger
 }
 
 // FindByID implements repository.VideoRepository.
-func (m *MemoryVideoRepository) FindByID(ctx context.Context, id string) (*domain.Video, error) {
+func (m *MemoryVideoRepository) FindByID(ctx context.Context, id string) (*domain.Generation, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -31,7 +31,7 @@ func (m *MemoryVideoRepository) FindByID(ctx context.Context, id string) (*domai
 }
 
 // Save implements repository.VideoRepository.
-func (m *MemoryVideoRepository) Save(ctx context.Context, video *domain.Video) error {
+func (m *MemoryVideoRepository) Save(ctx context.Context, video *domain.Generation) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -46,7 +46,7 @@ func (m *MemoryVideoRepository) Save(ctx context.Context, video *domain.Video) e
 }
 
 // Update implements repository.VideoRepository.
-func (m *MemoryVideoRepository) Update(ctx context.Context, video *domain.Video) error {
+func (m *MemoryVideoRepository) Update(ctx context.Context, video *domain.Generation) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -62,7 +62,7 @@ func (m *MemoryVideoRepository) Update(ctx context.Context, video *domain.Video)
 
 func NewMemoryVideoRepository(logger *slog.Logger) *MemoryVideoRepository {
 	return &MemoryVideoRepository{
-		videos: make(map[string]*domain.Video),
+		videos: make(map[string]*domain.Generation),
 		logger: logger,
 	}
 }
