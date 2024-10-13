@@ -116,6 +116,29 @@
           "Text2ManimService"
         ]
       }
+    },
+    "/v1/health": {
+      "get": {
+        "operationId": "Text2ManimService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Text2ManimService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -168,6 +191,12 @@
     "v1GenerationStatus": {
       "type": "object",
       "properties": {
+        "requestId": {
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
+        },
         "status": {
           "$ref": "#/definitions/v1GenerationStatusStatus"
         },
@@ -177,12 +206,16 @@
         "scriptUrl": {
           "type": "string"
         },
-        "prompt": {
+        "errorMessage": {
           "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
         },
         "updatedAt": {
           "type": "string",
-          "format": "int64"
+          "format": "date-time"
         }
       }
     },

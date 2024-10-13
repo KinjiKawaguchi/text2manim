@@ -7,10 +7,11 @@ import (
 
 	"github.com/KinjiKawaguchi/text2manim/api/internal/usecase"
 	pb "github.com/KinjiKawaguchi/text2manim/api/pkg/pb/text2manim/v1"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type Handler struct {
-	pb.UnimplementedText2ManimServiceServer
+	pb.Text2ManimServiceServer
 	useCase *usecase.VideoGeneratorUseCase
 	logger  *slog.Logger
 }
@@ -63,4 +64,9 @@ func (h *Handler) GetGenerationStatus(ctx context.Context, req *pb.GetGeneration
 func (h *Handler) StreamGenerationStatus(req *pb.StreamGenerationStatusRequest, stream pb.Text2ManimService_StreamGenerationStatusServer) error {
 	h.logger.Warn("StreamGenerationStatus called but not implemented")
 	return nil
+}
+
+func (h *Handler) HealthCheck(ctx context.Context, req *emptypb.Empty) (*emptypb.Empty, error) {
+	h.logger.Info("HealthCheck request received")
+	return &emptypb.Empty{}, nil
 }

@@ -2,46 +2,55 @@
 package config
 
 import (
+	"errors"
+	"log/slog"
 	"os"
+	"strings"
 
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	APIKeys     map[string]ServiceInfo `mapstructure:"api_keys"`
-	IPWhitelist []string               `mapstructure:"ip_whitelist"`
+	APIKeys     []string
+	IPWhitelist []string
 	WorkerAddr  string
 	ServerPort  string
 	LogLevel    string
+	DBType      string
+	DBHost      string
+	DBPort      string
+	DBUser      string
+	DBPassword  string
+	DBName      string
 }
 
-type ServiceInfo struct {
-	Service     string   `mapstructure:"service"`
-	Permissions []string `mapstructure:"permissions"`
-}
-
-func LoadConfig() (*Config, error) {
-	// YAML file for API keys and IP whitelist
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config/")
-	viper.AddConfigPath("/etc/text2manim/")
-
-	if err := viper.ReadInConfig(); err != nil {
-		return nil, err
+func LoadConfig(logger *slog.Logger) (*Config, error) {
+	// .envファイルを読み込む
+	err := godotenv.Load()
+	if err != nil {
+		logger.Warn("Failed to load .env file", "error", err)
 	}
 
-	var cfg Config
-	if err := viper.Unmarshal(&cfg); err != nil {
-		return nil, err
+	cfg := &Config{
+		APIKeys:     strings.Split(getEnv("API_KEYS", ""), ","),
+		IPWhitelist: strings.Split(getEnv("IP_WHITELIST", ""), ","),
+		WorkerAddr:  getEnv("WORKER_ADDR", "worker:50052"),
+		ServerPort:  getEnv("SERVER_PORT", "50051"),
+		LogLevel:    getEnv("LOG_LEVEL", "info"),
+		DBType:      getEnv("DB_TYPE", "memory"),
+		DBHost:      getEnv("DB_HOST", "localhost"),
+		DBPort:      getEnv("DB_PORT", "5432"),
+		DBUser:      getEnv("DB_USER", ""),
+		DBPassword:  getEnv("DB_PASSWORD", ""),
+		DBName:      getEnv("DB_NAME", ""),
 	}
 
-	// Environment variables for other configurations
-	cfg.WorkerAddr = getEnv("WORKER_ADDR", "worker:50052")
-	cfg.ServerPort = getEnv("SERVER_PORT", "50051")
-	cfg.LogLevel = getEnv("LOG_LEVEL", "info")
+	// APIキーの読み込み
+	if len(cfg.APIKeys) == 0 || (len(cfg.APIKeys) == 1 && cfg.APIKeys[0] == "") {
+		return nil, errors.New("API keys are not set")
+	}
 
-	return &cfg, nil
+	return cfg, nil
 }
 
 func getEnv(key, fallback string) string {
