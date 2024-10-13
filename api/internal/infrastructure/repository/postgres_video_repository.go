@@ -18,7 +18,6 @@ type PostgresVideoRepository struct {
 }
 
 func NewPostgresVideoRepository(cfg *config.Config, logger *slog.Logger) (*PostgresVideoRepository, error) {
-	logger.Info("Connecting to PostgreSQL", "host", cfg.DBHost, "port", cfg.DBPort, "user", cfg.DBUser, "dbname", cfg.DBName, "sslmode", "require", "password", cfg.DBPassword)
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=require",
 		cfg.DBHost, cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBPort)
 
