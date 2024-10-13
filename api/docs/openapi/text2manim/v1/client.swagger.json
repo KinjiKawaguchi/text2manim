@@ -191,6 +191,12 @@
     "v1GenerationStatus": {
       "type": "object",
       "properties": {
+        "requestId": {
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
+        },
         "status": {
           "$ref": "#/definitions/v1GenerationStatusStatus"
         },
@@ -200,12 +206,16 @@
         "scriptUrl": {
           "type": "string"
         },
-        "prompt": {
+        "errorMessage": {
           "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
         },
         "updatedAt": {
           "type": "string",
-          "format": "int64"
+          "format": "date-time"
         }
       }
     },

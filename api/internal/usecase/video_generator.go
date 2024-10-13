@@ -27,7 +27,7 @@ func NewVideoGeneratorUseCase(repo repository.VideoRepository, workerClient work
 
 func (uc *VideoGeneratorUseCase) CreateGeneration(ctx context.Context, prompt string) (string, error) {
 	uc.logger.Info("Creating new generation", "prompt", prompt)
-	video := &domain.Video{
+	video := &domain.Generation{
 		ID:        generateUniqueID(),
 		Prompt:    prompt,
 		Status:    domain.StatusPending,
@@ -42,7 +42,7 @@ func (uc *VideoGeneratorUseCase) CreateGeneration(ctx context.Context, prompt st
 	return video.ID, nil
 }
 
-func (uc *VideoGeneratorUseCase) GetGenerationStatus(ctx context.Context, id string) (*domain.Video, error) {
+func (uc *VideoGeneratorUseCase) GetGenerationStatus(ctx context.Context, id string) (*domain.Generation, error) {
 	uc.logger.Info("Getting generation status", "id", id)
 	video, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
@@ -53,7 +53,7 @@ func (uc *VideoGeneratorUseCase) GetGenerationStatus(ctx context.Context, id str
 	return video, nil
 }
 
-func (uc *VideoGeneratorUseCase) StreamGenerationStatus(ctx context.Context, id string, sendUpdate func(*domain.Video) error) error {
+func (uc *VideoGeneratorUseCase) StreamGenerationStatus(ctx context.Context, id string, sendUpdate func(*domain.Generation) error) error {
 	uc.logger.Info("Starting to stream generation status", "id", id)
 	for {
 		select {
@@ -79,7 +79,7 @@ func (uc *VideoGeneratorUseCase) StreamGenerationStatus(ctx context.Context, id 
 	}
 }
 
-func (uc *VideoGeneratorUseCase) processGeneration(video *domain.Video) {
+func (uc *VideoGeneratorUseCase) processGeneration(video *domain.Generation) {
 	ctx := context.Background()
 	uc.logger.Info("Starting generation process", "id", video.ID)
 
@@ -107,7 +107,7 @@ func (uc *VideoGeneratorUseCase) processGeneration(video *domain.Video) {
 	uc.logger.Info("Generation process completed", "id", video.ID)
 }
 
-func (uc *VideoGeneratorUseCase) updateStatus(ctx context.Context, video *domain.Video, status domain.VideoStatus, videoURL ...string) {
+func (uc *VideoGeneratorUseCase) updateStatus(ctx context.Context, video *domain.Generation, status domain.GenerationStatus, videoURL ...string) {
 	uc.logger.Info("Updating video status", "id", video.ID, "newStatus", status)
 	video.Status = status
 	video.UpdatedAt = time.Now()
