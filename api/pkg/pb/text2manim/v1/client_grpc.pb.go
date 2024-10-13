@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,6 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
+	Text2ManimService_HealthCheck_FullMethodName            = "/text2manim.v1.Text2ManimService/HealthCheck"
 	Text2ManimService_CreateGeneration_FullMethodName       = "/text2manim.v1.Text2ManimService/CreateGeneration"
 	Text2ManimService_GetGenerationStatus_FullMethodName    = "/text2manim.v1.Text2ManimService/GetGenerationStatus"
 	Text2ManimService_StreamGenerationStatus_FullMethodName = "/text2manim.v1.Text2ManimService/StreamGenerationStatus"
@@ -28,6 +30,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type Text2ManimServiceClient interface {
+	HealthCheck(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateGeneration(ctx context.Context, in *CreateGenerationRequest, opts ...grpc.CallOption) (*CreateGenerationResponse, error)
 	GetGenerationStatus(ctx context.Context, in *GetGenerationStatusRequest, opts ...grpc.CallOption) (*GetGenerationStatusResponse, error)
 	StreamGenerationStatus(ctx context.Context, in *StreamGenerationStatusRequest, opts ...grpc.CallOption) (Text2ManimService_StreamGenerationStatusClient, error)
@@ -39,6 +42,16 @@ type text2ManimServiceClient struct {
 
 func NewText2ManimServiceClient(cc grpc.ClientConnInterface) Text2ManimServiceClient {
 	return &text2ManimServiceClient{cc}
+}
+
+func (c *text2ManimServiceClient) HealthCheck(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, Text2ManimService_HealthCheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *text2ManimServiceClient) CreateGeneration(ctx context.Context, in *CreateGenerationRequest, opts ...grpc.CallOption) (*CreateGenerationResponse, error) {
@@ -98,6 +111,7 @@ func (x *text2ManimServiceStreamGenerationStatusClient) Recv() (*StreamGeneratio
 // All implementations must embed UnimplementedText2ManimServiceServer
 // for forward compatibility
 type Text2ManimServiceServer interface {
+	HealthCheck(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	CreateGeneration(context.Context, *CreateGenerationRequest) (*CreateGenerationResponse, error)
 	GetGenerationStatus(context.Context, *GetGenerationStatusRequest) (*GetGenerationStatusResponse, error)
 	StreamGenerationStatus(*StreamGenerationStatusRequest, Text2ManimService_StreamGenerationStatusServer) error
@@ -108,6 +122,9 @@ type Text2ManimServiceServer interface {
 type UnimplementedText2ManimServiceServer struct {
 }
 
+func (UnimplementedText2ManimServiceServer) HealthCheck(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
 func (UnimplementedText2ManimServiceServer) CreateGeneration(context.Context, *CreateGenerationRequest) (*CreateGenerationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGeneration not implemented")
 }
@@ -128,6 +145,24 @@ type UnsafeText2ManimServiceServer interface {
 
 func RegisterText2ManimServiceServer(s grpc.ServiceRegistrar, srv Text2ManimServiceServer) {
 	s.RegisterService(&Text2ManimService_ServiceDesc, srv)
+}
+
+func _Text2ManimService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Text2ManimServiceServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Text2ManimService_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Text2ManimServiceServer).HealthCheck(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Text2ManimService_CreateGeneration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -194,6 +229,10 @@ var Text2ManimService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "text2manim.v1.Text2ManimService",
 	HandlerType: (*Text2ManimServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "HealthCheck",
+			Handler:    _Text2ManimService_HealthCheck_Handler,
+		},
 		{
 			MethodName: "CreateGeneration",
 			Handler:    _Text2ManimService_CreateGeneration_Handler,

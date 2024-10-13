@@ -4,10 +4,16 @@ package text2manim.v1;
 
 import "google/api/annotations.proto";
 import "google/api/httpbody.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/kinjikawaguchi/text2manim/api/pkg/pb/text2manim/v1;text2manim_v1";
 
 service Text2ManimService {
+  rpc HealthCheck(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/v1/health"
+    };
+  }
   rpc CreateGeneration(CreateGenerationRequest) returns (CreateGenerationResponse) {
     option (google.api.http) = {
       post: "/v1/generations"
