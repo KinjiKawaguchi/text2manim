@@ -60,17 +60,20 @@ func (am *AuthMiddleware) checkIPWhitelist(ctx context.Context) error {
 		am.logger.Error("Unable to get peer info")
 		return status.Error(codes.Unauthenticated, "unable to get peer info")
 	}
+
 	ip, _, err := net.SplitHostPort(p.Addr.String())
 	if err != nil {
 		am.logger.Error("Unable to get IP address", "error", err)
 		return status.Error(codes.Unauthenticated, "unable to get IP address")
 	}
+
 	for _, allowedIP := range am.config.IPWhitelist {
 		if allowedIP == ip {
 			am.logger.Info("IP whitelisting successful", "ip", ip)
 			return nil
 		}
 	}
+
 	am.logger.Warn("IP not in whitelist", "ip", ip)
 	return status.Error(codes.PermissionDenied, "IP not in whitelist")
 }
@@ -81,18 +84,21 @@ func (am *AuthMiddleware) checkAPIKey(ctx context.Context) error {
 		am.logger.Error("Unable to get metadata")
 		return status.Error(codes.Unauthenticated, "unable to get metadata")
 	}
+
 	apiKeys := md.Get("x-api-key")
 	if len(apiKeys) == 0 {
 		am.logger.Warn("API key not provided")
 		return status.Error(codes.Unauthenticated, "API key not provided")
 	}
+
 	apiKey := apiKeys[0]
-	if serviceInfo, exists := am.config.APIKeys[apiKey]; exists {
-		am.logger.Info("API key validation successful", "service", serviceInfo.Service)
-		// ここで必要に応じて追加の権限チェックを行うことができます
-		// ctx = context.WithValue(ctx, "service", serviceInfo.Service)
-		return nil
+	for _, validKey := range am.config.APIKeys {
+		if apiKey == validKey {
+			am.logger.Info("API key validation successful")
+			return nil
+		}
 	}
+
 	am.logger.Warn("Invalid API key")
 	return status.Error(codes.Unauthenticated, "invalid API key")
 }

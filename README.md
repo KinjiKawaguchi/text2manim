@@ -28,25 +28,19 @@ Text2Manimは、大規模言語モデル（LLM）とManimを使用して、テ�
    cd text2manim
    ```
 
-2. 設定ファイルを準備します：
-   - `api/config/config.yaml` を必要に応じて編集します。
-     デフォルトの設定:
+2. 環境変数を設定します：
+    - `api/.env.example` を `api/.env` にコピーし、必要な環境変数を設定します。
+      ```
+      cp api/.env.example api/.env
+      ```
+      設定項目:
+      - `API_KEYS`: カンマ区切りのAPIキーリスト（例: "key1,key2,key3"）
+      - `IP_WHITELIST`: カンマ区切りの許可IPアドレスリスト（例: "192.168.1.0/24,10.0.0.1,172.18.0.4"）
+      - `WORKER_ADDR`: ワーカーのアドレス（デフォルト: "worker:50052"）
+      - `SERVER_PORT`: APIサーバーのポート（デフォルト: "50051"）
+      - `LOG_LEVEL`: ログレベル（デフォルト: "info"）
 
-     ```yaml
-     api_keys:
-       key1:
-         service: 'service1'
-         permissions: ['read', 'write']
-       key2:
-         service: 'service2'
-         permissions: ['read']
-     ip_whitelist:
-       - '192.168.1.0/24'
-       - '10.0.0.1'
-       - '172.18.0.4'
-     ```
-
-     注意: 実運用環境では、セキュリティのためにAPIキーを変更することを強く推奨します。
+      注意: 実運用環境では、セキュリティのためにAPIキーを変更することを強く推奨します。
 
    - `worker/.env.example` を `worker/.env` にコピーし、必要な環境変数を設定します。
 
@@ -107,23 +101,18 @@ Text2Manimは、大規模言語モデル（LLM）とManimを使用して、テ�
 
 ## 設定
 
-### api/config/config.yaml
+### api/.env
 
-このファイルでは、APIキーと許可するIPアドレスを設定します。
+このファイルでは、APIキーと許可するIPアドレス、その他のAPI設定を環境変数として定義します。
 
-```yaml
-api_keys:
-  key1:
-    service: 'service1'
-    permissions: ['read', 'write']
-  key2:
-    service: 'service2'
-    permissions: ['read']
-ip_whitelist:
-  - '192.168.1.0/24'
-  - '10.0.0.1'
-  - '172.18.0.4'
+```plaintext
+API_KEYS=key1,key2,key3
+IP_WHITELIST=192.168.1.0/24,10.0.0.1,172.18.0.4
+WORKER_ADDR=worker:50052
+SERVER_PORT=50051
+LOG_LEVEL=info
 ```
+
 
 ### worker/.env
 
