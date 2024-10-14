@@ -6,7 +6,7 @@ import torch
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from typing import Optional
-from src.config import Config
+from config import Config
 
 
 class Text2ManimModel:

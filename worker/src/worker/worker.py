@@ -1,6 +1,6 @@
-from src.generated.proto.text2manim.v1 import worker_pb2, worker_pb2_grpc
-from src.models.text2manim_model import Text2ManimModel
-from src.storage.storage_manager import StorageManager
+from generated.proto.text2manim.v1 import worker_pb2, worker_pb2_grpc
+from models.text2manim_model import Text2ManimModel
+from storage.storage_manager import StorageManager
 import grpc
 
 
