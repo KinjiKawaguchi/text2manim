@@ -44,8 +44,6 @@ class Config:
         self.log_level: str = os.getenv("LOG_LEVEL", "INFO")
         self.log_file: str = os.getenv("LOG_FILE", "")
 
-        # セキュリティ設定
-        self.allowed_ips: List[str] = os.getenv("ALLOWED_IPS", "").split(",")
 
         self.validate()
         print(self.__str__())
@@ -96,7 +94,6 @@ class Config:
         Manim Output File: {self.manim_output_file}
         Log Level: {self.log_level}
         Log File: {self.log_file}
-        Allowed IPs: {', '.join(self.allowed_ips) if self.allowed_ips else 'All'}
         """
 
 
