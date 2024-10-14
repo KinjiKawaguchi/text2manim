@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log/slog"
+	"net"
 	"net/http"
 	"os"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 func main() {
@@ -29,6 +31,7 @@ func main() {
 
 	mux := runtime.NewServeMux(
 		runtime.WithIncomingHeaderMatcher(CustomMatcher),
+		runtime.WithMetadata(addOriginalIPMetadata),
 	)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
@@ -45,15 +48,22 @@ func main() {
 	}
 }
 
+func addOriginalIPMetadata(ctx context.Context, r *http.Request) metadata.MD {
+	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	return metadata.Pairs("x-original-ip", ip)
+}
+
 func CustomMatcher(key string) (string, bool) {
 	switch key {
 	case "X-Api-Key":
 		return key, true
+	case "X-Original-Ip":
+		// このヘッダーは転送しない
+		return "", false
 	default:
 		return runtime.DefaultHeaderMatcher(key)
 	}
 }
-
 func loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		slog.Info("Received request",
