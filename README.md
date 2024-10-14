@@ -107,10 +107,6 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
      - `LOG_LEVEL`: ログレベル（INFO, DEBUG, WARNING, ERROR など）
      - `LOG_FILE`: ログファイルのパス
 
-     h. セキュリティ設定:
-
-     - `ALLOWED_IPS`: アクセスを許可する IP アドレス（カンマ区切りで複数指定可能）
-
      注意:
 
      - OpenAI API 使用時は`USE_OPENAI=true`に設定し、`OPENAI_API_KEY`を必ず設定してください。
@@ -132,7 +128,7 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
 このファイルでは、API キーと許可する IP アドレス、その他の API 設定を環境変数として定義します。
 
 - `API_KEYS`: カンマ区切りの API キーリスト
-- `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト
+- `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト(アスタリスク(\*)を使用してすべての IP を許可することも可能)
 - `WORKER_PORT`: ワーカーのポート番号
 - `SERVER_PORT`: API サーバーのポート番号
 - `LOG_LEVEL`: ログレベル
