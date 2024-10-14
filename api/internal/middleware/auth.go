@@ -55,16 +55,23 @@ func (am *AuthMiddleware) authorize(ctx context.Context) error {
 }
 
 func (am *AuthMiddleware) checkIPWhitelist(ctx context.Context) error {
-	p, ok := peer.FromContext(ctx)
+	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		am.logger.Error("Unable to get peer info")
-		return status.Error(codes.Unauthenticated, "unable to get peer info")
+		am.logger.Error("Unable to get metadata")
+		return status.Error(codes.Unauthenticated, "unable to get metadata")
 	}
 
-	ip, _, err := net.SplitHostPort(p.Addr.String())
-	if err != nil {
-		am.logger.Error("Unable to get IP address", "error", err)
-		return status.Error(codes.Unauthenticated, "unable to get IP address")
+	var ip string
+	originalIPs := md.Get("x-original-ip")
+	if len(originalIPs) > 0 {
+		ip = originalIPs[0]
+	} else {
+		p, ok := peer.FromContext(ctx)
+		if !ok {
+			am.logger.Error("Unable to get peer info")
+			return status.Error(codes.Unauthenticated, "unable to get peer info")
+		}
+		ip, _, _ = net.SplitHostPort(p.Addr.String())
 	}
 
 	for _, allowedIP := range am.config.IPWhitelist {
@@ -77,7 +84,6 @@ func (am *AuthMiddleware) checkIPWhitelist(ctx context.Context) error {
 			return nil
 		}
 	}
-
 	am.logger.Warn("IP not in whitelist", "ip", ip)
 	return status.Error(codes.PermissionDenied, "IP not in whitelist")
 }
