@@ -9,6 +9,13 @@ from typing import Optional
 from src.config import Config
 
 
+def extract_code_from_markdown(content: str) -> str:
+    if content.strip().startswith("```") and content.strip().endswith("```"):
+        lines = content.strip().split("\n")
+        return "\n".join(lines[1:-1])  # Remove the first and last lines (```)
+    return content
+
+
 class Text2ManimModel:
     def __init__(self, config):
         self.config: Config = config
@@ -45,7 +52,7 @@ class Text2ManimModel:
                 print("Warning: Received empty content from OpenAI API")
                 return None
 
-            return content
+            return extract_code_from_markdown(content)
         except Exception as e:
             print(f"Error occurred while generating script: {str(e)}")
             return None
