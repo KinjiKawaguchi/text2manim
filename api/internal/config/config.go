@@ -11,17 +11,18 @@ import (
 )
 
 type Config struct {
-	APIKeys     []string
-	IPWhitelist []string
-	WorkerAddr  string
-	ServerPort  string
-	LogLevel    string
-	DBType      string
-	DBHost      string
-	DBPort      string
-	DBUser      string
-	DBPassword  string
-	DBName      string
+	APIKeys           []string
+	IPWhitelist       []string
+	WorkerAddr        string
+	ServerPort        string
+	LogLevel          string
+	DBType            string
+	DBHost            string
+	DBPort            string
+	DBUser            string
+	DBPassword        string
+	DBName            string
+	GrpcServerAddress string
 }
 
 func LoadConfig(logger *slog.Logger) (*Config, error) {
@@ -32,17 +33,18 @@ func LoadConfig(logger *slog.Logger) (*Config, error) {
 	}
 
 	cfg := &Config{
-		APIKeys:     strings.Split(getEnv("API_KEYS", ""), ","),
-		IPWhitelist: strings.Split(getEnv("IP_WHITELIST", ""), ","),
-		WorkerAddr:  getEnv("WORKER_ADDR", "worker:50052"),
-		ServerPort:  getEnv("SERVER_PORT", "50051"),
-		LogLevel:    getEnv("LOG_LEVEL", "info"),
-		DBType:      getEnv("DB_TYPE", "memory"),
-		DBHost:      getEnv("DB_HOST", "localhost"),
-		DBPort:      getEnv("DB_PORT", "5432"),
-		DBUser:      getEnv("DB_USER", ""),
-		DBPassword:  getEnv("DB_PASSWORD", ""),
-		DBName:      getEnv("DB_NAME", ""),
+		APIKeys:           strings.Split(getEnv("API_KEYS", ""), ","),
+		IPWhitelist:       strings.Split(getEnv("IP_WHITELIST", ""), ","),
+		WorkerAddr:        getEnv("WORKER_ADDR", "worker:50052"),
+		ServerPort:        getEnv("SERVER_PORT", "50051"),
+		LogLevel:          getEnv("LOG_LEVEL", "info"),
+		DBType:            getEnv("DB_TYPE", "memory"),
+		DBHost:            getEnv("DB_HOST", "localhost"),
+		DBPort:            getEnv("DB_PORT", "5432"),
+		DBUser:            getEnv("DB_USER", ""),
+		DBPassword:        getEnv("DB_PASSWORD", ""),
+		DBName:            getEnv("DB_NAME", ""),
+		GrpcServerAddress: getEnv("GRPC_SERVER_ADDRESS", "localhost:50051"),
 	}
 
 	// APIキーの読み込み
