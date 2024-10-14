@@ -44,8 +44,10 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
      - `SERVER_PORT`: API サーバーのポート（デフォルト: "50051"）
      - `LOG_LEVEL`: ログレベル（デフォルト: "INFO"）
      - `DB_TYPE`: データベースタイプ（"postgres" または "memory"）
+     - `GRPC_SERVER_ADDRESS`: gRPC サーバーアドレス（デフォルト: "localhost:50051"）
 
-     postgresを選択した場合の追加設定:
+     postgres を選択した場合の追加設定:
+
      - `DB_HOST`: PostgreSQL データベースホスト
      - `DB_PORT`: PostgreSQL データベースポート
      - `DB_USER`: PostgreSQL データベースユーザー名
@@ -53,6 +55,7 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
      - `DB_NAME`: PostgreSQL データベース名
 
      注意:
+
      - 実運用環境では、セキュリティのために API キーとデータベース認証情報を変更することを強く推奨します。
      - `DB_TYPE` を "memory" に設定した場合、PostgreSQL 関連の設定は無視されます。
 
@@ -139,6 +142,7 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
 - `DB_USER`: PostgreSQL データベースユーザー名
 - `DB_PASSWORD`: PostgreSQL データベースパスワード
 - `DB_NAME`: PostgreSQL データベース名
+- `GRPC_SERVER_ADDRESS`: gRPC サーバーアドレス
 
 ### worker/.env
 

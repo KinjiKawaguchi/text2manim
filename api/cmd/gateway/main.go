@@ -6,17 +6,22 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/KinjiKawaguchi/text2manim/api/internal/config"
 	pb "github.com/KinjiKawaguchi/text2manim/api/pkg/pb/text2manim/v1"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const grpcServerAddress = "api:50051"
-
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	slog.SetDefault(logger)
+
+	cfg, err := config.LoadConfig(logger)
+	if err != nil {
+		logger.Error("Failed to load config", "error", err)
+		os.Exit(1)
+	}
 
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
@@ -27,7 +32,7 @@ func main() {
 	)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	err := pb.RegisterText2ManimServiceHandlerFromEndpoint(ctx, mux, grpcServerAddress, opts)
+	err = pb.RegisterText2ManimServiceHandlerFromEndpoint(ctx, mux, cfg.GrpcServerAddress, opts)
 	if err != nil {
 		slog.Error("Failed to register gRPC gateway", "error", err)
 		os.Exit(1)
