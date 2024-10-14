@@ -84,11 +84,11 @@ func (uc *VideoGeneratorUseCase) processGeneration(video *domain.Generation) {
 	uc.logger.Info("Starting generation process", "id", video.ID)
 
 	// スクリプト生成
-	uc.updateStatus(ctx, video, domain.StatusProcessing)
+	uc.updateStatus(ctx, video, domain.StatusProcessing, "", "")
 	script, err := uc.workerClient.GenerateManimScript(ctx, video.ID, video.Prompt)
 	if err != nil {
 		uc.logger.Error("Failed to generate Manim script", "id", video.ID, "error", err)
-		uc.updateStatus(ctx, video, domain.StatusFailed)
+		uc.updateStatus(ctx, video, domain.StatusFailed, "", err.Error())
 		return
 	}
 	uc.logger.Info("Manim script generated", "id", video.ID)
@@ -97,22 +97,25 @@ func (uc *VideoGeneratorUseCase) processGeneration(video *domain.Generation) {
 	videoURL, err := uc.workerClient.GenerateManimVideo(ctx, video.ID, script)
 	if err != nil {
 		uc.logger.Error("Failed to generate Manim video", "id", video.ID, "error", err)
-		uc.updateStatus(ctx, video, domain.StatusFailed)
+		uc.updateStatus(ctx, video, domain.StatusFailed, "", err.Error())
 		return
 	}
 	uc.logger.Info("Manim video generated", "id", video.ID, "url", videoURL)
 
 	// 完了
-	uc.updateStatus(ctx, video, domain.StatusCompleted, videoURL)
+	uc.updateStatus(ctx, video, domain.StatusCompleted, videoURL, "")
 	uc.logger.Info("Generation process completed", "id", video.ID)
 }
 
-func (uc *VideoGeneratorUseCase) updateStatus(ctx context.Context, video *domain.Generation, status domain.GenerationStatus, videoURL ...string) {
+func (uc *VideoGeneratorUseCase) updateStatus(ctx context.Context, video *domain.Generation, status domain.GenerationStatus, videoURL string, errorMessage string) {
 	uc.logger.Info("Updating video status", "id", video.ID, "newStatus", status)
 	video.Status = status
 	video.UpdatedAt = time.Now()
-	if len(videoURL) > 0 {
-		video.VideoURL = videoURL[0]
+	if videoURL != "" {
+		video.VideoURL = videoURL
+	}
+	if errorMessage != "" {
+		video.ErrorMessage = errorMessage
 	}
 	if err := uc.repo.Update(ctx, video); err != nil {
 		uc.logger.Error("Failed to update video status", "id", video.ID, "error", err)
