@@ -35,7 +35,7 @@ func LoadConfig(logger *slog.Logger) (*Config, error) {
 	cfg := &Config{
 		APIKeys:           strings.Split(getEnv("API_KEYS", ""), ","),
 		IPWhitelist:       strings.Split(getEnv("IP_WHITELIST", ""), ","),
-		WorkerAddr:        getEnv("WORKER_ADDR", "worker:50052"),
+		WorkerAddr:        getEnv("WORKER_ADDR", "localhost:50052"),
 		ServerPort:        getEnv("SERVER_PORT", "50051"),
 		LogLevel:          getEnv("LOG_LEVEL", "info"),
 		DBType:            getEnv("DB_TYPE", "memory"),
