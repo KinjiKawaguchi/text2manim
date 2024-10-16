@@ -9,6 +9,7 @@ import (
 	"github.com/KinjiKawaguchi/text2manim/api/internal/domain"
 	"github.com/KinjiKawaguchi/text2manim/api/internal/interface/repository"
 	"github.com/KinjiKawaguchi/text2manim/api/internal/interface/worker"
+	"github.com/google/uuid"
 )
 
 type VideoGeneratorUseCase struct {
@@ -123,5 +124,5 @@ func (uc *VideoGeneratorUseCase) updateStatus(ctx context.Context, video *domain
 }
 
 func generateUniqueID() string {
-	return fmt.Sprintf("vid_%d", time.Now().UnixNano())
+	return uuid.New().String()
 }
