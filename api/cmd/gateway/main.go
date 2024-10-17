@@ -17,7 +17,6 @@ import (
 
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
-	slog.SetDefault(logger)
 
 	cfg, err := config.LoadConfig(logger)
 	if err != nil {
@@ -37,13 +36,13 @@ func main() {
 
 	err = pb.RegisterText2ManimServiceHandlerFromEndpoint(ctx, mux, cfg.GrpcServerAddress, opts)
 	if err != nil {
-		slog.Error("Failed to register gRPC gateway", "error", err)
+		logger.Error("Failed to register gRPC gateway", "error", err)
 		os.Exit(1)
 	}
 
-	slog.Info("Starting HTTP server", "address", ":8080")
-	if err := http.ListenAndServe(":8080", loggingMiddleware(mux)); err != nil {
-		slog.Error("Failed to serve HTTP", "error", err)
+	logger.Info("Starting HTTP server", "address", ":8080")
+	if err := http.ListenAndServe(":8080", loggingMiddleware(mux, logger)); err != nil {
+		logger.Error("Failed to serve HTTP", "error", err)
 		os.Exit(1)
 	}
 }
@@ -64,9 +63,10 @@ func CustomMatcher(key string) (string, bool) {
 		return runtime.DefaultHeaderMatcher(key)
 	}
 }
-func loggingMiddleware(next http.Handler) http.Handler {
+
+func loggingMiddleware(next http.Handler, logger *slog.Logger) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		slog.Info("Received request",
+		logger.Info("Received request",
 			"method", r.Method,
 			"path", r.URL.Path,
 			"remote_addr", r.RemoteAddr,
