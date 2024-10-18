@@ -7,6 +7,7 @@ from generated.proto.text2manim.v1 import (
     client_pb2 as text2manim_dot_v1_dot_client__pb2,
 )
 
+
 class Text2ManimServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
@@ -17,25 +18,25 @@ class Text2ManimServiceStub(object):
             channel: A grpc.Channel.
         """
         self.HealthCheck = channel.unary_unary(
-                '/text2manim.v1.Text2ManimService/HealthCheck',
-                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                _registered_method=True)
+            '/text2manim.v1.Text2ManimService/HealthCheck',
+            request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            _registered_method=True)
         self.CreateGeneration = channel.unary_unary(
-                '/text2manim.v1.Text2ManimService/CreateGeneration',
-                request_serializer=text2manim_dot_v1_dot_client__pb2.CreateGenerationRequest.SerializeToString,
-                response_deserializer=text2manim_dot_v1_dot_client__pb2.CreateGenerationResponse.FromString,
-                _registered_method=True)
+            '/text2manim.v1.Text2ManimService/CreateGeneration',
+            request_serializer=text2manim_dot_v1_dot_client__pb2.CreateGenerationRequest.SerializeToString,
+            response_deserializer=text2manim_dot_v1_dot_client__pb2.CreateGenerationResponse.FromString,
+            _registered_method=True)
         self.GetGenerationStatus = channel.unary_unary(
-                '/text2manim.v1.Text2ManimService/GetGenerationStatus',
-                request_serializer=text2manim_dot_v1_dot_client__pb2.GetGenerationStatusRequest.SerializeToString,
-                response_deserializer=text2manim_dot_v1_dot_client__pb2.GetGenerationStatusResponse.FromString,
-                _registered_method=True)
+            '/text2manim.v1.Text2ManimService/GetGenerationStatus',
+            request_serializer=text2manim_dot_v1_dot_client__pb2.GetGenerationStatusRequest.SerializeToString,
+            response_deserializer=text2manim_dot_v1_dot_client__pb2.GetGenerationStatusResponse.FromString,
+            _registered_method=True)
         self.StreamGenerationStatus = channel.unary_stream(
-                '/text2manim.v1.Text2ManimService/StreamGenerationStatus',
-                request_serializer=text2manim_dot_v1_dot_client__pb2.StreamGenerationStatusRequest.SerializeToString,
-                response_deserializer=text2manim_dot_v1_dot_client__pb2.StreamGenerationStatusResponse.FromString,
-                _registered_method=True)
+            '/text2manim.v1.Text2ManimService/StreamGenerationStatus',
+            request_serializer=text2manim_dot_v1_dot_client__pb2.StreamGenerationStatusRequest.SerializeToString,
+            response_deserializer=text2manim_dot_v1_dot_client__pb2.StreamGenerationStatusResponse.FromString,
+            _registered_method=True)
 
 
 class Text2ManimServiceServicer(object):
@@ -68,48 +69,50 @@ class Text2ManimServiceServicer(object):
 
 def add_Text2ManimServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'HealthCheck': grpc.unary_unary_rpc_method_handler(
-                    servicer.HealthCheck,
-                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            ),
-            'CreateGeneration': grpc.unary_unary_rpc_method_handler(
-                    servicer.CreateGeneration,
-                    request_deserializer=text2manim_dot_v1_dot_client__pb2.CreateGenerationRequest.FromString,
-                    response_serializer=text2manim_dot_v1_dot_client__pb2.CreateGenerationResponse.SerializeToString,
-            ),
-            'GetGenerationStatus': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetGenerationStatus,
-                    request_deserializer=text2manim_dot_v1_dot_client__pb2.GetGenerationStatusRequest.FromString,
-                    response_serializer=text2manim_dot_v1_dot_client__pb2.GetGenerationStatusResponse.SerializeToString,
-            ),
-            'StreamGenerationStatus': grpc.unary_stream_rpc_method_handler(
-                    servicer.StreamGenerationStatus,
-                    request_deserializer=text2manim_dot_v1_dot_client__pb2.StreamGenerationStatusRequest.FromString,
-                    response_serializer=text2manim_dot_v1_dot_client__pb2.StreamGenerationStatusResponse.SerializeToString,
-            ),
+        'HealthCheck': grpc.unary_unary_rpc_method_handler(
+            servicer.HealthCheck,
+            request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        ),
+        'CreateGeneration': grpc.unary_unary_rpc_method_handler(
+            servicer.CreateGeneration,
+            request_deserializer=text2manim_dot_v1_dot_client__pb2.CreateGenerationRequest.FromString,
+            response_serializer=text2manim_dot_v1_dot_client__pb2.CreateGenerationResponse.SerializeToString,
+        ),
+        'GetGenerationStatus': grpc.unary_unary_rpc_method_handler(
+            servicer.GetGenerationStatus,
+            request_deserializer=text2manim_dot_v1_dot_client__pb2.GetGenerationStatusRequest.FromString,
+            response_serializer=text2manim_dot_v1_dot_client__pb2.GetGenerationStatusResponse.SerializeToString,
+        ),
+        'StreamGenerationStatus': grpc.unary_stream_rpc_method_handler(
+            servicer.StreamGenerationStatus,
+            request_deserializer=text2manim_dot_v1_dot_client__pb2.StreamGenerationStatusRequest.FromString,
+            response_serializer=text2manim_dot_v1_dot_client__pb2.StreamGenerationStatusResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'text2manim.v1.Text2ManimService', rpc_method_handlers)
+        'text2manim.v1.Text2ManimService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('text2manim.v1.Text2ManimService', rpc_method_handlers)
-
+    server.add_registered_method_handlers(
+        'text2manim.v1.Text2ManimService', rpc_method_handlers)
 
  # This class is part of an EXPERIMENTAL API.
+
+
 class Text2ManimService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def HealthCheck(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+                    target,
+                    options=(),
+                    channel_credentials=None,
+                    call_credentials=None,
+                    insecure=False,
+                    compression=None,
+                    wait_for_ready=None,
+                    timeout=None,
+                    metadata=None):
         return grpc.experimental.unary_unary(
             request,
             target,
@@ -128,15 +131,15 @@ class Text2ManimService(object):
 
     @staticmethod
     def CreateGeneration(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+                         target,
+                         options=(),
+                         channel_credentials=None,
+                         call_credentials=None,
+                         insecure=False,
+                         compression=None,
+                         wait_for_ready=None,
+                         timeout=None,
+                         metadata=None):
         return grpc.experimental.unary_unary(
             request,
             target,
@@ -155,15 +158,15 @@ class Text2ManimService(object):
 
     @staticmethod
     def GetGenerationStatus(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+                            target,
+                            options=(),
+                            channel_credentials=None,
+                            call_credentials=None,
+                            insecure=False,
+                            compression=None,
+                            wait_for_ready=None,
+                            timeout=None,
+                            metadata=None):
         return grpc.experimental.unary_unary(
             request,
             target,
@@ -182,15 +185,15 @@ class Text2ManimService(object):
 
     @staticmethod
     def StreamGenerationStatus(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+                               target,
+                               options=(),
+                               channel_credentials=None,
+                               call_credentials=None,
+                               insecure=False,
+                               compression=None,
+                               wait_for_ready=None,
+                               timeout=None,
+                               metadata=None):
         return grpc.experimental.unary_stream(
             request,
             target,

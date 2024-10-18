@@ -2,11 +2,14 @@ syntax = "proto3";
 
 package text2manim.v1;
 
+import "google/protobuf/empty.proto";
+
 option go_package = "github.com/KinjiKawaguchi/text2manim/api/pkg/text2manim/v1;text2manim_v1";
 
 service WorkerService {
     rpc GenerateManimScript(GenerateManimScriptRequest) returns (GenerateManimScriptResponse) {}
     rpc GenerateManimVideo(GenerateManimVideoRequest) returns (GenerateManimVideoResponse) {}
+    rpc HealthCheck(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   }
 
 message GenerateManimScriptRequest {
