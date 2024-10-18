@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion8
 const (
 	WorkerService_GenerateManimScript_FullMethodName = "/text2manim.v1.WorkerService/GenerateManimScript"
 	WorkerService_GenerateManimVideo_FullMethodName  = "/text2manim.v1.WorkerService/GenerateManimVideo"
+	WorkerService_HealthCheck_FullMethodName         = "/text2manim.v1.WorkerService/HealthCheck"
 )
 
 // WorkerServiceClient is the client API for WorkerService service.
@@ -29,6 +31,7 @@ const (
 type WorkerServiceClient interface {
 	GenerateManimScript(ctx context.Context, in *GenerateManimScriptRequest, opts ...grpc.CallOption) (*GenerateManimScriptResponse, error)
 	GenerateManimVideo(ctx context.Context, in *GenerateManimVideoRequest, opts ...grpc.CallOption) (*GenerateManimVideoResponse, error)
+	HealthCheck(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type workerServiceClient struct {
@@ -59,12 +62,23 @@ func (c *workerServiceClient) GenerateManimVideo(ctx context.Context, in *Genera
 	return out, nil
 }
 
+func (c *workerServiceClient) HealthCheck(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, WorkerService_HealthCheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkerServiceServer is the server API for WorkerService service.
 // All implementations must embed UnimplementedWorkerServiceServer
 // for forward compatibility
 type WorkerServiceServer interface {
 	GenerateManimScript(context.Context, *GenerateManimScriptRequest) (*GenerateManimScriptResponse, error)
 	GenerateManimVideo(context.Context, *GenerateManimVideoRequest) (*GenerateManimVideoResponse, error)
+	HealthCheck(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedWorkerServiceServer()
 }
 
@@ -77,6 +91,9 @@ func (UnimplementedWorkerServiceServer) GenerateManimScript(context.Context, *Ge
 }
 func (UnimplementedWorkerServiceServer) GenerateManimVideo(context.Context, *GenerateManimVideoRequest) (*GenerateManimVideoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateManimVideo not implemented")
+}
+func (UnimplementedWorkerServiceServer) HealthCheck(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
 }
 func (UnimplementedWorkerServiceServer) mustEmbedUnimplementedWorkerServiceServer() {}
 
@@ -127,6 +144,24 @@ func _WorkerService_GenerateManimVideo_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkerService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkerServiceServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkerService_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkerServiceServer).HealthCheck(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkerService_ServiceDesc is the grpc.ServiceDesc for WorkerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -141,6 +176,10 @@ var WorkerService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GenerateManimVideo",
 			Handler:    _WorkerService_GenerateManimVideo_Handler,
+		},
+		{
+			MethodName: "HealthCheck",
+			Handler:    _WorkerService_HealthCheck_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

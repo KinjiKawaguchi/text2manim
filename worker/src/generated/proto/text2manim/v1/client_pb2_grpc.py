@@ -4,9 +4,7 @@
 import grpc
 
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
-from generated.proto.text2manim.v1 import (
-    client_pb2 as text2manim_dot_v1_dot_client__pb2,
-)
+from text2manim.v1 import client_pb2 as text2manim_dot_v1_dot_client__pb2
 
 
 class Text2ManimServiceStub(object):

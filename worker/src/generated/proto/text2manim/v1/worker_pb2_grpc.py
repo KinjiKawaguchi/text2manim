@@ -3,10 +3,8 @@
 
 import grpc
 
-from generated.proto.text2manim.v1 import (
-    worker_pb2 as text2manim_dot_v1_dot_worker__pb2,
-)
-import grpc.experimental
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
+from text2manim.v1 import worker_pb2 as text2manim_dot_v1_dot_worker__pb2
 
 
 class WorkerServiceStub(object):
@@ -30,6 +28,12 @@ class WorkerServiceStub(object):
             response_deserializer=text2manim_dot_v1_dot_worker__pb2.GenerateManimVideoResponse.FromString,
             _registered_method=True,
         )
+        self.HealthCheck = channel.unary_unary(
+            "/text2manim.v1.WorkerService/HealthCheck",
+            request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            _registered_method=True,
+        )
 
 
 class WorkerServiceServicer(object):
@@ -47,6 +51,12 @@ class WorkerServiceServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
+    def HealthCheck(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
 
 def add_WorkerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -59,6 +69,11 @@ def add_WorkerServiceServicer_to_server(servicer, server):
             servicer.GenerateManimVideo,
             request_deserializer=text2manim_dot_v1_dot_worker__pb2.GenerateManimVideoRequest.FromString,
             response_serializer=text2manim_dot_v1_dot_worker__pb2.GenerateManimVideoResponse.SerializeToString,
+        ),
+        "HealthCheck": grpc.unary_unary_rpc_method_handler(
+            servicer.HealthCheck,
+            request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -123,6 +138,36 @@ class WorkerService(object):
             "/text2manim.v1.WorkerService/GenerateManimVideo",
             text2manim_dot_v1_dot_worker__pb2.GenerateManimVideoRequest.SerializeToString,
             text2manim_dot_v1_dot_worker__pb2.GenerateManimVideoResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True,
+        )
+
+    @staticmethod
+    def HealthCheck(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/text2manim.v1.WorkerService/HealthCheck",
+            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
             insecure,

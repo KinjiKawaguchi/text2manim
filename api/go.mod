@@ -1,6 +1,6 @@
 module github.com/KinjiKawaguchi/text2manim/api
 
-go 1.22.5
+go 1.23
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.21.0
@@ -25,6 +25,7 @@ require (
 )
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect

@@ -44,7 +44,6 @@ class Config:
         self.log_level: str = os.getenv("LOG_LEVEL", "INFO")
         self.log_file: str = os.getenv("LOG_FILE", "")
 
-
         self.validate()
         print(self.__str__())
 

@@ -40,7 +40,7 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
 
      - `API_KEYS`: カンマ区切りの API キーリスト（例: "key1,key2"）
      - `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト（例: "127.0.0.1,127.0.0.2"）
-     - `WORKER_PORT`: ワーカーのポート（デフォルト: "50052"）
+     - `WORKER_ADDR: ワーカーサーバーアドレス（デフォルト: "localhost:50052"）
      - `SERVER_PORT`: API サーバーのポート（デフォルト: "50051"）
      - `LOG_LEVEL`: ログレベル（デフォルト: "INFO"）
      - `DB_TYPE`: データベースタイプ（"postgres" または "memory"）
@@ -129,7 +129,7 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
 
 - `API_KEYS`: カンマ区切りの API キーリスト
 - `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト(アスタリスク(\*)を使用してすべての IP を許可することも可能)
-- `WORKER_PORT`: ワーカーのポート番号
+- `WORKER_ADDR`: ワーカーサーバーアドレス
 - `SERVER_PORT`: API サーバーのポート番号
 - `LOG_LEVEL`: ログレベル
 - `DB_TYPE`: データベースタイプ（"postgres" または "memory"）

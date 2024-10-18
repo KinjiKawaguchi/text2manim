@@ -18,7 +18,8 @@ type Generation struct {
 type GenerationStatus int
 
 const (
-	StatusPending GenerationStatus = iota
+	StatusUnspecified GenerationStatus = iota
+	StatusPending
 	StatusProcessing
 	StatusCompleted
 	StatusFailed

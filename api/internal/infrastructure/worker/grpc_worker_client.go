@@ -9,6 +9,7 @@ import (
 	pb "github.com/KinjiKawaguchi/text2manim/api/pkg/pb/text2manim/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type GRPCWorkerClient struct {
@@ -68,4 +69,15 @@ func (c *GRPCWorkerClient) GenerateManimVideo(ctx context.Context, taskID, scrip
 	duration := time.Since(startTime)
 	c.logger.Info("Successfully generated Manim video", "taskID", taskID, "duration", duration, "videoURL", response.VideoUrl)
 	return response.VideoUrl, nil
+}
+
+func (c *GRPCWorkerClient) HealthCheck(ctx context.Context) error {
+	c.logger.Info("Performing worker health check")
+	_, err := c.client.HealthCheck(ctx, &emptypb.Empty{})
+	if err != nil {
+		c.logger.Error("Worker health check failed", "error", err)
+		return fmt.Errorf("worker health check failed: %w", err)
+	}
+	c.logger.Info("Worker health check succeeded")
+	return nil
 }
