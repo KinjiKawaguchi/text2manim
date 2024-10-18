@@ -1,3 +1,4 @@
+from google.protobuf import empty_pb2 as _empty_pb2
 from generated.proto.text2manim.v1 import worker_pb2, worker_pb2_grpc
 from models.text2manim_model import Text2ManimModel
 from storage.storage_manager import StorageManager
@@ -48,3 +49,7 @@ class WorkerServicer(worker_pb2_grpc.WorkerServiceServicer):
             return worker_pb2.GenerateManimVideoResponse(
                 task_id=request.task_id, success=False, error_message=str(e)
             )
+
+    def HealthCheck(self):
+        self.logger.info("Received health check request")
+        return _empty_pb2.Empty()
