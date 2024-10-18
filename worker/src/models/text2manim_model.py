@@ -9,6 +9,7 @@ from typing import Optional
 from config import Config
 
 
+# NOTE: 途中にテキストが含まれている場合には対応していない。
 def extract_code_from_markdown(content: str) -> str:
     if content.strip().startswith("```") and content.strip().endswith("```"):
         lines = content.strip().split("\n")
