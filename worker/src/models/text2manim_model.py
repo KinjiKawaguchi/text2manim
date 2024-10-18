@@ -36,11 +36,11 @@ class Text2ManimModel:
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are a helpful assistant that generates Manim scripts.All output must be in a form that can be executed, so if you are outputting natural language, please comment it out or take other measures.Markdown is also not allowed.(BAD example: ```python code ```)",
+                        "content": "You are a helpful assistant that generates Manim scripts.All output must be in a form that can be executed, so if you are outputting natural language, please comment it out or take other measures.",
                     },
                     {
                         "role": "user",
-                        "content": f"Generate a Manim script for the following prompt: {prompt}.Markdown is not allowed.(BAD example: ```python code ```)",
+                        "content": f"Generate a Manim script for the following prompt: {prompt}.",
                     },
                 ],
                 max_tokens=self.config.openai_max_tokens,
