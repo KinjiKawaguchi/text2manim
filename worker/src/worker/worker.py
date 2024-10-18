@@ -50,6 +50,6 @@ class WorkerServicer(worker_pb2_grpc.WorkerServiceServicer):
                 task_id=request.task_id, success=False, error_message=str(e)
             )
 
-    def HealthCheck(self):
+    def HealthCheck(self, request, context):
         self.logger.info("Received health check request")
         return _empty_pb2.Empty()
