@@ -22,9 +22,10 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1atext2manim/v1/worker.proto\x12\rtext2manim.v1\"M\n\x1aGenerateManimScriptRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x16\n\x06prompt\x18\x02 \x01(\tR\x06prompt\"m\n\x1bGenerateManimScriptResponse\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x16\n\x06script\x18\x02 \x01(\tR\x06script\x12\x1d\n\nscript_url\x18\x03 \x01(\tR\tscriptUrl\"L\n\x19GenerateManimVideoRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x16\n\x06script\x18\x02 \x01(\tR\x06script\"\xb0\x01\n\x1aGenerateManimVideoResponse\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x18\n\x07success\x18\x02 \x01(\x08R\x07success\x12\x1b\n\tvideo_url\x18\x03 \x01(\tR\x08videoUrl\x12\x1d\n\nscript_url\x18\x05 \x01(\tR\tscriptUrl\x12#\n\rerror_message\x18\x04 \x01(\tR\x0c\x65rrorMessage2\xec\x01\n\rWorkerService\x12n\n\x13GenerateManimScript\x12).text2manim.v1.GenerateManimScriptRequest\x1a*.text2manim.v1.GenerateManimScriptResponse\"\x00\x12k\n\x12GenerateManimVideo\x12(.text2manim.v1.GenerateManimVideoRequest\x1a).text2manim.v1.GenerateManimVideoResponse\"\x00\x42JZHgithub.com/KinjiKawaguchi/text2manim/api/pkg/text2manim/v1;text2manim_v1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1atext2manim/v1/worker.proto\x12\rtext2manim.v1\x1a\x1bgoogle/protobuf/empty.proto\"M\n\x1aGenerateManimScriptRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x16\n\x06prompt\x18\x02 \x01(\tR\x06prompt\"m\n\x1bGenerateManimScriptResponse\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x16\n\x06script\x18\x02 \x01(\tR\x06script\x12\x1d\n\nscript_url\x18\x03 \x01(\tR\tscriptUrl\"L\n\x19GenerateManimVideoRequest\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x16\n\x06script\x18\x02 \x01(\tR\x06script\"\xb0\x01\n\x1aGenerateManimVideoResponse\x12\x17\n\x07task_id\x18\x01 \x01(\tR\x06taskId\x12\x18\n\x07success\x18\x02 \x01(\x08R\x07success\x12\x1b\n\tvideo_url\x18\x03 \x01(\tR\x08videoUrl\x12\x1d\n\nscript_url\x18\x05 \x01(\tR\tscriptUrl\x12#\n\rerror_message\x18\x04 \x01(\tR\x0c\x65rrorMessage2\xad\x02\n\rWorkerService\x12n\n\x13GenerateManimScript\x12).text2manim.v1.GenerateManimScriptRequest\x1a*.text2manim.v1.GenerateManimScriptResponse\"\x00\x12k\n\x12GenerateManimVideo\x12(.text2manim.v1.GenerateManimVideoRequest\x1a).text2manim.v1.GenerateManimVideoResponse\"\x00\x12?\n\x0bHealthCheck\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x42JZHgithub.com/KinjiKawaguchi/text2manim/api/pkg/text2manim/v1;text2manim_v1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,14 +33,14 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'text2manim.v1.worker_pb2', 
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'ZHgithub.com/KinjiKawaguchi/text2manim/api/pkg/text2manim/v1;text2manim_v1'
-  _globals['_GENERATEMANIMSCRIPTREQUEST']._serialized_start=45
-  _globals['_GENERATEMANIMSCRIPTREQUEST']._serialized_end=122
-  _globals['_GENERATEMANIMSCRIPTRESPONSE']._serialized_start=124
-  _globals['_GENERATEMANIMSCRIPTRESPONSE']._serialized_end=233
-  _globals['_GENERATEMANIMVIDEOREQUEST']._serialized_start=235
-  _globals['_GENERATEMANIMVIDEOREQUEST']._serialized_end=311
-  _globals['_GENERATEMANIMVIDEORESPONSE']._serialized_start=314
-  _globals['_GENERATEMANIMVIDEORESPONSE']._serialized_end=490
-  _globals['_WORKERSERVICE']._serialized_start=493
-  _globals['_WORKERSERVICE']._serialized_end=729
+  _globals['_GENERATEMANIMSCRIPTREQUEST']._serialized_start=74
+  _globals['_GENERATEMANIMSCRIPTREQUEST']._serialized_end=151
+  _globals['_GENERATEMANIMSCRIPTRESPONSE']._serialized_start=153
+  _globals['_GENERATEMANIMSCRIPTRESPONSE']._serialized_end=262
+  _globals['_GENERATEMANIMVIDEOREQUEST']._serialized_start=264
+  _globals['_GENERATEMANIMVIDEOREQUEST']._serialized_end=340
+  _globals['_GENERATEMANIMVIDEORESPONSE']._serialized_start=343
+  _globals['_GENERATEMANIMVIDEORESPONSE']._serialized_end=519
+  _globals['_WORKERSERVICE']._serialized_start=522
+  _globals['_WORKERSERVICE']._serialized_end=823
 # @@protoc_insertion_point(module_scope)
