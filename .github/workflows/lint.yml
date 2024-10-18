@@ -31,7 +31,7 @@ jobs:
       - uses: chartboost/ruff-action@v1
         with:
           args: 'format --check'
-          src: './api'
+          src: './worker'
 
   pytest:
     name: Run Tests
@@ -39,6 +39,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: sksat/setup-rye@v0.29.0
+      - name: Change directory
+        run: cd ./worker
       - name: Install dependencies
         run: rye sync
       - name: Run pytest
