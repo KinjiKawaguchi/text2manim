@@ -65,6 +65,7 @@ func (am *AuthMiddleware) checkIPWhitelist(ctx context.Context) error {
 	originalIPs := md.Get("x-original-ip")
 	if len(originalIPs) > 0 {
 		ip = originalIPs[0]
+		am.logger.Info("Using original IP", "ip", ip)
 	} else {
 		p, ok := peer.FromContext(ctx)
 		if !ok {
@@ -72,6 +73,7 @@ func (am *AuthMiddleware) checkIPWhitelist(ctx context.Context) error {
 			return status.Error(codes.Unauthenticated, "unable to get peer info")
 		}
 		ip, _, _ = net.SplitHostPort(p.Addr.String())
+		am.logger.Info("Using peer IP", "ip", ip)
 	}
 
 	for _, allowedIP := range am.config.IPWhitelist {
