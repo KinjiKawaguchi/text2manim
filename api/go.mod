@@ -1,6 +1,6 @@
 module github.com/KinjiKawaguchi/text2manim/api
 
-go 1.22.5
+go 1.23.2
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.21.0
