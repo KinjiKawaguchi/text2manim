@@ -123,6 +123,14 @@ func (uc *VideoGeneratorUseCase) updateStatus(ctx context.Context, video *domain
 	}
 }
 
+func (uc *VideoGeneratorUseCase) HealthCheck(ctx context.Context) error {
+	if err := uc.workerClient.HealthCheck(ctx); err != nil {
+		uc.logger.Error("Worker health check failed", "error", err)
+		return fmt.Errorf("worker health check failed: %w", err)
+	}
+	return nil
+}
+
 func generateUniqueID() string {
 	return uuid.New().String()
 }
