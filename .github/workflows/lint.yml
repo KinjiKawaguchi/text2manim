@@ -33,6 +33,17 @@ jobs:
           args: 'format --check'
           src: './api'
 
+  pytest:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: sksat/setup-rye@v0.29.0
+      - name: Install dependencies
+        run: rye sync
+      - name: Run pytest
+        run: rye run pytest
+
   buf-lint:
     name: lint-protobuf
     runs-on: ubuntu-latest
