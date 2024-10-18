@@ -21,6 +21,7 @@ def hello_world():
     print("Hello, World!")"""
     assert extract_code_from_markdown(markdown_content) == expected_output
 
+
 # NOTE: このケースは対応していない
 # def test_extract_code_from_markdown_with_multiple_code_blocks():
 #     markdown_content = """```python
