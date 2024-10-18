@@ -8,6 +8,7 @@ import (
 
 	pb "github.com/KinjiKawaguchi/text2manim/api/pkg/pb/text2manim/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -18,7 +19,7 @@ type GRPCWorkerClient struct {
 
 func NewGRPCWorkerClient(address string, logger *slog.Logger) (*GRPCWorkerClient, error) {
 	logger.Info("Connecting to worker", "address", address)
-	conn, err := grpc.NewClient(address, grpc.WithInsecure())
+	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Error("Failed to connect to worker", "error", err)
 		return nil, fmt.Errorf("failed to connect to worker: %w", err)
