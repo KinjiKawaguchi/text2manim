@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"net"
@@ -14,6 +15,7 @@ import (
 	"github.com/KinjiKawaguchi/text2manim/api/internal/usecase"
 	pb "github.com/KinjiKawaguchi/text2manim/api/pkg/pb/text2manim/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func main() {
@@ -50,6 +52,13 @@ func main() {
 
 	useCase := usecase.NewVideoGeneratorUseCase(repo, workerClient, logger)
 	handler := handler.NewHandler(useCase, logger)
+
+	_, err = handler.HealthCheck(context.Background(), &emptypb.Empty{})
+	if err != nil {
+		logger.Error("Failed to connect to worker", "error", err)
+		os.Exit(1)
+	}
+
 	authMiddleware := middleware.NewAuthMiddleware(cfg, logger)
 
 	server := grpc.NewServer(
