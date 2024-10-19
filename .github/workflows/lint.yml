@@ -39,10 +39,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: sksat/setup-rye@v0.29.0
-      - name: Install test dependencies and run pytest
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpango1.0-dev libcairo2-dev
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/rye
+          key: ${{ runner.os }}-rye-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-rye-
+      - name: Install dependencies and run pytest
         run: |
           cd ./worker
-          rye install pytest
+          rye sync
           rye run pytest
 
   buf-lint:
