@@ -25,7 +25,7 @@ func NewGRPCWorkerClient(address string, logger *slog.Logger) (*GRPCWorkerClient
 		return nil, fmt.Errorf("failed to connect to worker: %w", err)
 	}
 	client := pb.NewWorkerServiceClient(conn)
-	logger.Info("Successfully connected to worker")
+	logger.Info("Successfully create worker clint")
 	return &GRPCWorkerClient{client: client, logger: logger}, nil
 }
 
