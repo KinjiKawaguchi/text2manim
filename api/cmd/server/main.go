@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net"
 	"os"
+	"time"
 
 	"github.com/KinjiKawaguchi/text2manim/api/internal/config"
 	"github.com/KinjiKawaguchi/text2manim/api/internal/infrastructure/grpc/handler"
@@ -28,14 +29,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	// 新しいリポジトリファクトリー関数を使用
 	repo, err := repository.NewVideoRepository(cfg, logger)
 	if err != nil {
 		logger.Error("Failed to create video repository", "error", err)
 		os.Exit(1)
 	}
 
-	// PostgreSQLを使用している場合、アプリケーション終了時にDBコネクションを閉じる
 	if closer, ok := repo.(interface{ Close() error }); ok {
 		defer func() {
 			if err := closer.Close(); err != nil {
@@ -53,14 +52,30 @@ func main() {
 	useCase := usecase.NewVideoGeneratorUseCase(repo, workerClient, logger)
 	handler := handler.NewHandler(useCase, logger)
 
-	_, err = handler.HealthCheck(context.Background(), &emptypb.Empty{})
-	if err != nil {
-		logger.Error("Failed to connect to worker", "error", err)
-		os.Exit(1)
+	// 1分間ヘルスチェックをリトライする
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	defer cancel()
+
+	for {
+		select {
+		case <-ctx.Done():
+			logger.Error("Health check failed after 1 minute of retrying")
+			os.Exit(1)
+		default:
+			_, err = handler.HealthCheck(ctx, &emptypb.Empty{})
+			if err == nil {
+				logger.Info("Health check passed")
+				break
+			}
+			logger.Warn("Health check failed, retrying...", "error", err)
+			time.Sleep(time.Second) // 1秒待ってからリトライ
+		}
+		if err == nil {
+			break
+		}
 	}
 
 	authMiddleware := middleware.NewAuthMiddleware(cfg, logger)
-
 	server := grpc.NewServer(
 		grpc.UnaryInterceptor(authMiddleware.UnaryInterceptor()),
 		grpc.StreamInterceptor(authMiddleware.StreamInterceptor()),
