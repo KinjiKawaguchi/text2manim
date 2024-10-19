@@ -39,10 +39,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: sksat/setup-rye@v0.29.0
-      - name: Install dependencies and run pytest
+      - name: Install test dependencies and run pytest
         run: |
           cd ./worker
-          rye sync
+          rye install pytest
           rye run pytest
 
   buf-lint:
