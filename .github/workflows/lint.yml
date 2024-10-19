@@ -39,12 +39,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: sksat/setup-rye@v0.29.0
-      - name: Change directory
-        run: cd ./worker
-      - name: Install dependencies
-        run: rye sync
-      - name: Run pytest
-        run: rye run pytest
+      - name: Install dependencies and run pytest
+        run: |
+          cd ./worker
+          rye sync
+          rye run pytest
 
   buf-lint:
     name: lint-protobuf
