@@ -16,6 +16,7 @@ dependencies = [
     "openai>=1.44.0",
     "python-dotenv>=1.0.1",
     "pytest>=8.3.3",
+    "loguru>=0.7.2",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
