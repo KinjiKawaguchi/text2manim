@@ -11,7 +11,9 @@ class GenerateManimScriptRequest(_message.Message):
     PROMPT_FIELD_NUMBER: _ClassVar[int]
     task_id: str
     prompt: str
-    def __init__(self, task_id: _Optional[str] = ..., prompt: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self, task_id: _Optional[str] = ..., prompt: _Optional[str] = ...
+    ) -> None: ...
 
 class GenerateManimScriptResponse(_message.Message):
     __slots__ = ("task_id", "script", "script_url")
@@ -21,7 +23,12 @@ class GenerateManimScriptResponse(_message.Message):
     task_id: str
     script: str
     script_url: str
-    def __init__(self, task_id: _Optional[str] = ..., script: _Optional[str] = ..., script_url: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        task_id: _Optional[str] = ...,
+        script: _Optional[str] = ...,
+        script_url: _Optional[str] = ...,
+    ) -> None: ...
 
 class GenerateManimVideoRequest(_message.Message):
     __slots__ = ("task_id", "script")
@@ -29,7 +36,9 @@ class GenerateManimVideoRequest(_message.Message):
     SCRIPT_FIELD_NUMBER: _ClassVar[int]
     task_id: str
     script: str
-    def __init__(self, task_id: _Optional[str] = ..., script: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self, task_id: _Optional[str] = ..., script: _Optional[str] = ...
+    ) -> None: ...
 
 class GenerateManimVideoResponse(_message.Message):
     __slots__ = ("task_id", "success", "video_url", "script_url", "error_message")
@@ -43,4 +52,11 @@ class GenerateManimVideoResponse(_message.Message):
     video_url: str
     script_url: str
     error_message: str
-    def __init__(self, task_id: _Optional[str] = ..., success: bool = ..., video_url: _Optional[str] = ..., script_url: _Optional[str] = ..., error_message: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        task_id: _Optional[str] = ...,
+        success: bool = ...,
+        video_url: _Optional[str] = ...,
+        script_url: _Optional[str] = ...,
+        error_message: _Optional[str] = ...,
+    ) -> None: ...

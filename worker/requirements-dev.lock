@@ -85,6 +85,8 @@ idna==3.10
     # via anyio
     # via httpx
     # via requests
+iniconfig==2.0.0
+    # via pytest
 isosurfaces==0.1.2
     # via manim
 jinja2==3.1.4
@@ -155,10 +157,13 @@ openai==1.51.2
     # via worker
 packaging==24.1
     # via huggingface-hub
+    # via pytest
     # via transformers
 pillow==10.4.0
     # via manim
     # via moderngl-window
+pluggy==1.5.0
+    # via pytest
 proto-plus==1.24.0
     # via google-api-core
 protobuf==5.28.2
@@ -188,6 +193,8 @@ pyparsing==3.2.0
     # via httplib2
 pyrr==0.10.3
     # via moderngl-window
+pytest==8.3.3
+    # via worker
 python-dotenv==1.0.1
     # via worker
 pyyaml==6.0.2
