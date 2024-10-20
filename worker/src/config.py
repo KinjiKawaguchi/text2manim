@@ -18,34 +18,30 @@ class Config:
 
         # クラウドストレージ設定 (GCP を例として)
         self.gcp_bucket_name: str = os.getenv("GCP_BUCKET_NAME", "")
-        self.use_cloud_run_auth: bool = os.getenv("USE_CLOUD_RUN_AUTH", "false").lower() == "true"
+        self.use_cloud_run_auth: bool = (
+            os.getenv("USE_CLOUD_RUN_AUTH", "false").lower() == "true"
+        )
         self.gcp_credentials_path: str = os.getenv("GCP_CREDENTIALS_PATH", "")
 
         # OpenAI APIを使用する場合の設定
         # OpenAIのモデルを使うかどうか
-        self.use_openai: bool = os.getenv(
-            "USE_OPENAI", "false").lower() == "true"
+        self.use_openai: bool = os.getenv("USE_OPENAI", "false").lower() == "true"
         self.openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
         self.openai_model = os.getenv("OPENAI_MODEL", "gpt-4o")
-        self.openai_max_tokens: int = int(
-            os.getenv("OPENAI_MAX_TOKENS", "1000"))
-        self.openai_temperature: float = float(
-            os.getenv("OPENAI_TEMPERATURE", "0.7"))
+        self.openai_max_tokens: int = int(os.getenv("OPENAI_MAX_TOKENS", "1000"))
+        self.openai_temperature: float = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
         self.openai_top_p: float = float(os.getenv("OPENAI_TOP_P", "0.95"))
 
         # モデル設定
-        self.model_name: str = os.getenv(
-            "MODEL_NAME", "your-username/your-model-name")
+        self.model_name: str = os.getenv("MODEL_NAME", "your-username/your-model-name")
         self.model_max_length: int = int(os.getenv("MODEL_MAX_LENGTH", "1000"))
-        self.model_temperature: float = float(
-            os.getenv("MODEL_TEMPERATURE", "0.7"))
+        self.model_temperature: float = float(os.getenv("MODEL_TEMPERATURE", "0.7"))
         self.model_top_k: int = int(os.getenv("MODEL_TOP_K", "50"))
         self.model_top_p: float = float(os.getenv("MODEL_TOP_P", "0.95"))
 
         # Manim 設定
         self.manim_quality: str = os.getenv("MANIM_QUALITY", "medium_quality")
-        self.manim_output_file: str = os.getenv(
-            "MANIM_OUTPUT_FILE", "scene.mp4")
+        self.manim_output_file: str = os.getenv("MANIM_OUTPUT_FILE", "scene.mp4")
 
         # ロギング設定
         self.log_level: str = os.getenv("LOG_LEVEL", "INFO")
