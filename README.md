@@ -40,7 +40,7 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
 
      - `API_KEYS`: カンマ区切りの API キーリスト（例: "key1,key2"）
      - `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト（例: "127.0.0.1,127.0.0.2"）
-     - `WORKER_ADDR: ワーカーサーバーアドレス（デフォルト: "localhost:50052"）
+     - `WORKER_ADDR`: ワーカーサーバーアドレス（デフォルト: "localhost:50052"）
      - `SERVER_PORT`: API サーバーのポート（デフォルト: "50051"）
      - `LOG_LEVEL`: ログレベル（デフォルト: "INFO"）
      - `DB_TYPE`: データベースタイプ（"postgres" または "memory"）
@@ -75,6 +75,7 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
      - `STORAGE_TYPE`: 使用するストレージタイプ（`local` または `gcp`）
      - `LOCAL_STORAGE_PATH`: ローカルストレージを使用する場合の保存先パス
      - `GCP_BUCKET_NAME`: GCP バケットの名前（GCP 使用時）
+     - `USE_CLOUD_RUN_AUTH`: Cloud Storageなどに対してCloud Run 認証を使用するかどうか（`true` または `false`）
      - `GCP_CREDENTIALS_PATH`: GCP サービスアカウントキーファイルのパス（GCP 使用時）
 
      c. OpenAI 設定:
@@ -112,6 +113,7 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
      - OpenAI API 使用時は`USE_OPENAI=true`に設定し、`OPENAI_API_KEY`を必ず設定してください。
      - GCP ストレージ使用時は`STORAGE_TYPE=gcp`に設定し、関連設定を行ってください。
      - 実運用環境では`ALLOWED_IPS`を適切に設定してください。
+     - Cloud Run で本APIを展開する場合は`USE_CLOUD_RUN_AUTH=true`に設定し、使用するService AccountにCloud Storageへのアクセス権限を付与してください。
 
 3. Docker イメージをビルドし、コンテナを起動します：
 
@@ -120,38 +122,6 @@ Text2Manim は、大規模言語モデル（LLM）と Manim を使用して、�
    ```
 
 これで、API サーバーとワーカーが起動し、サービスの利用準備が整います。
-
-## 設定
-
-### api/.env
-
-このファイルでは、API キーと許可する IP アドレス、その他の API 設定を環境変数として定義します。
-
-- `API_KEYS`: カンマ区切りの API キーリスト
-- `IP_WHITELIST`: カンマ区切りの許可 IP アドレスリスト(アスタリスク(\*)を使用してすべての IP を許可することも可能)
-- `WORKER_ADDR`: ワーカーサーバーアドレス
-- `SERVER_PORT`: API サーバーのポート番号
-- `LOG_LEVEL`: ログレベル
-- `DB_TYPE`: データベースタイプ（"postgres" または "memory"）
-- `DB_HOST`: PostgreSQL データベースホスト
-- `DB_PORT`: PostgreSQL データベースポート
-- `DB_USER`: PostgreSQL データベースユーザー名
-- `DB_PASSWORD`: PostgreSQL データベースパスワード
-- `DB_NAME`: PostgreSQL データベース名
-- `GRPC_SERVER_ADDRESS`: gRPC サーバーアドレス
-
-### worker/.env
-
-このファイルでは、ワーカーの設定を行います。主な設定項目は以下の通りです：
-
-- `WORKER_PORT`: ワーカーのポート番号
-- `STORAGE_TYPE`: ストレージタイプ（local または gcp）
-- `USE_OPENAI`: OpenAI API を使用するかどうか
-- `MODEL_NAME`: 使用する言語モデルの名前
-- `MANIM_QUALITY`: Manim の出力品質
-- `LOG_LEVEL`: ログレベル
-
-詳細な設定オプションについては、`.env.example` ファイルを参照してください。
 
 ## 使用方法
 

@@ -18,6 +18,7 @@ class Config:
 
         # クラウドストレージ設定 (GCP を例として)
         self.gcp_bucket_name: str = os.getenv("GCP_BUCKET_NAME", "")
+        self.use_cloud_run_auth: bool = os.getenv("USE_CLOUD_RUN_AUTH", "false").lower() == "true"
         self.gcp_credentials_path: str = os.getenv("GCP_CREDENTIALS_PATH", "")
 
         # OpenAI APIを使用する場合の設定
@@ -82,6 +83,7 @@ class Config:
         Storage Type: {self.storage_type}
         Local Storage Path: {self.local_storage_path}
         GCP Bucket Name: {self.gcp_bucket_name}
+        Use Cloud Run Auth: {self.use_cloud_run_auth}
         GCP Credentials Path: {self.gcp_credentials_path}
         Use OpenAI: {self.use_openai}
         OpenAI API Key: {self.openai_api_key}
