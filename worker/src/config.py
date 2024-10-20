@@ -53,12 +53,13 @@ class Config:
         if self.storage_type not in ["local", "gcp"]:
             raise ValueError(f"Invalid storage type: {self.storage_type}")
 
-        if self.storage_type == "gcp" and (
-            not self.gcp_bucket_name or not self.gcp_credentials_path
-        ):
-            raise ValueError(
-                "GCP storage selected but bucket name or credentials path is missing"
-            )
+        if self.storage_type == "gcp":
+            if not self.gcp_bucket_name:
+                raise ValueError("GCP storage selected but bucket name is missing")
+            if not self.use_cloud_run_auth and not self.gcp_credentials_path:
+                raise ValueError(
+                    "GCP storage selected with local auth, but credentials path is missing"
+                )
 
         if self.manim_quality not in [
             "low_quality",
@@ -70,6 +71,11 @@ class Config:
 
         if self.log_level not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
             raise ValueError(f"Invalid log level: {self.log_level}")
+
+        if self.use_cloud_run_auth and self.storage_type != "gcp":
+            raise ValueError(
+                "Cloud Run auth is enabled but storage type is not set to GCP"
+            )
 
     def __str__(self):
         return f"""
