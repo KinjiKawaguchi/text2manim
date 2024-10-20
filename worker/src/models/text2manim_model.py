@@ -11,7 +11,7 @@ from config import Config
 
 # NOTE: 途中にテキストが含まれている場合には対応していない。
 def extract_code_from_markdown(content: str) -> str:
-    if content.strip().startswith("```") and content.strip().endswith("```"):
+    if content.strip().startswith("```python") and content.strip().endswith("```"):
         lines = content.strip().split("\n")
         return "\n".join(lines[1:-1])  # Remove the first and last lines (```)
     return content
@@ -40,7 +40,7 @@ class Text2ManimModel:
                     },
                     {
                         "role": "user",
-                        "content": f"Generate a Manim script for the following prompt: {prompt}.",
+                        "content": f"Generate a Manim script for the following prompt: {prompt}. Do not output in natural language, only in executable Python code. Your output will be executed directly in the execution environment.",
                     },
                 ],
                 max_tokens=self.config.openai_max_tokens,
