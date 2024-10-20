@@ -6,7 +6,18 @@ import torch
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from typing import Optional
-from src.config import Config
+from config import Config
+
+
+# NOTE: 途中にテキストが含まれている場合には対応していない。
+def extract_code_from_markdown(content: str) -> str:
+    content = content.strip()
+    if (
+        content.startswith("```python") or content.startswith("```")
+    ) and content.endswith("```"):
+        lines = content.split("\n")
+        return "\n".join(lines[1:-1])  # Remove the first and last lines (```)
+    return content
 
 
 class Text2ManimModel:
@@ -28,11 +39,11 @@ class Text2ManimModel:
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are a helpful assistant that generates Manim scripts.All output must be in a form that can be executed, so if you are outputting natural language, please comment it out or take other measures.Markdown is also not allowed.(BAD example: ```python code ```)",
+                        "content": "You are a helpful assistant that generates Manim scripts.All output must be in a form that can be executed, so if you are outputting natural language, please comment it out or take other measures.",
                     },
                     {
                         "role": "user",
-                        "content": f"Generate a Manim script for the following prompt: {prompt}.Markdown is not allowed.(BAD example: ```python code ```)",
+                        "content": f"Generate a Manim script for the following prompt: {prompt}. Do not output in natural language, only in executable Python code. Your output will be executed directly in the execution environment.",
                     },
                 ],
                 max_tokens=self.config.openai_max_tokens,
@@ -45,14 +56,15 @@ class Text2ManimModel:
                 print("Warning: Received empty content from OpenAI API")
                 return None
 
-            return content
+            return extract_code_from_markdown(content)
         except Exception as e:
             print(f"Error occurred while generating script: {str(e)}")
             return None
 
     def _generate_script_local(self, prompt: str) -> str:
         # プロンプトの準備
-        full_prompt = f"Generate a Manim script for the following prompt: {prompt}\n\nMakim script:"
+        full_prompt = f"Generate a Manim script for the following prompt: {
+            prompt}\n\nMakim script:"
 
         # トークナイズとモデル入力の準備
         inputs = self.tokenizer(full_prompt, return_tensors="pt").to(self.device)

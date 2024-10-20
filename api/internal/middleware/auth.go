@@ -77,6 +77,10 @@ func (am *AuthMiddleware) checkIPWhitelist(ctx context.Context) error {
 	}
 
 	for _, allowedIP := range am.config.IPWhitelist {
+		if allowedIP == "*" {
+			am.logger.Info("IP whitelisting disabled", "ip", ip)
+			return nil
+		}
 		if allowedIP == ip {
 			am.logger.Info("IP whitelisting successful", "ip", ip)
 			return nil

@@ -1,14 +1,18 @@
 from google.cloud import storage
 from google.oauth2 import service_account
+from config import Config
 
 
 class GCPStorage:
-    def __init__(self, config):
+    def __init__(self, config: Config):
         self.config = config
-        credentials = service_account.Credentials.from_service_account_file(
-            self.config.gcp_credentials_path
-        )
-        self.client = storage.Client(credentials=credentials)
+        if self.config.use_cloud_run_auth:
+            self.client = storage.Client()
+        else:
+            credentials = service_account.Credentials.from_service_account_file(
+                self.config.gcp_credentials_path
+            )
+            self.client = storage.Client(credentials=credentials)
         self.bucket = self.client.bucket(self.config.gcp_bucket_name)
 
     def upload_video(self, video_path, task_id):

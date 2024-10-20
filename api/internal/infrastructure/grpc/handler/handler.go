@@ -74,5 +74,10 @@ func (h *Handler) StreamGenerationStatus(req *pb.StreamGenerationStatusRequest, 
 
 func (h *Handler) HealthCheck(ctx context.Context, req *emptypb.Empty) (*emptypb.Empty, error) {
 	h.logger.Info("HealthCheck request received")
+	if err := h.useCase.HealthCheck(ctx); err != nil {
+		h.logger.Error("HealthCheck failed", "error", err)
+		return nil, err
+	}
+	h.logger.Info("HealthCheck completed")
 	return &emptypb.Empty{}, nil
 }

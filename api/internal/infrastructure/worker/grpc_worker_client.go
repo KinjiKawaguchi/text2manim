@@ -8,7 +8,8 @@ import (
 
 	pb "github.com/KinjiKawaguchi/text2manim/api/pkg/pb/text2manim/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type GRPCWorkerClient struct {
@@ -18,14 +19,13 @@ type GRPCWorkerClient struct {
 
 func NewGRPCWorkerClient(address string, logger *slog.Logger) (*GRPCWorkerClient, error) {
 	logger.Info("Connecting to worker", "address", address)
-	creds := credentials.NewClientTLSFromCert(nil, "")
-	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(creds))
+	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Error("Failed to connect to worker", "error", err)
 		return nil, fmt.Errorf("failed to connect to worker: %w", err)
 	}
 	client := pb.NewWorkerServiceClient(conn)
-	logger.Info("Successfully connected to worker")
+	logger.Info("Successfully create worker clint")
 	return &GRPCWorkerClient{client: client, logger: logger}, nil
 }
 
@@ -69,4 +69,15 @@ func (c *GRPCWorkerClient) GenerateManimVideo(ctx context.Context, taskID, scrip
 	duration := time.Since(startTime)
 	c.logger.Info("Successfully generated Manim video", "taskID", taskID, "duration", duration, "videoURL", response.VideoUrl)
 	return response.VideoUrl, nil
+}
+
+func (c *GRPCWorkerClient) HealthCheck(ctx context.Context) error {
+	c.logger.Info("Performing worker health check")
+	_, err := c.client.HealthCheck(ctx, &emptypb.Empty{})
+	if err != nil {
+		c.logger.Error("Worker health check failed", "error", err)
+		return fmt.Errorf("worker health check failed: %w", err)
+	}
+	c.logger.Info("Worker health check succeeded")
+	return nil
 }

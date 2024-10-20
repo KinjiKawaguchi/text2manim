@@ -18,6 +18,9 @@ class Config:
 
         # クラウドストレージ設定 (GCP を例として)
         self.gcp_bucket_name: str = os.getenv("GCP_BUCKET_NAME", "")
+        self.use_cloud_run_auth: bool = (
+            os.getenv("USE_CLOUD_RUN_AUTH", "false").lower() == "true"
+        )
         self.gcp_credentials_path: str = os.getenv("GCP_CREDENTIALS_PATH", "")
 
         # OpenAI APIを使用する場合の設定
@@ -44,22 +47,19 @@ class Config:
         self.log_level: str = os.getenv("LOG_LEVEL", "INFO")
         self.log_file: str = os.getenv("LOG_FILE", "")
 
-        # セキュリティ設定
-        self.allowed_ips: List[str] = os.getenv("ALLOWED_IPS", "").split(",")
-
         self.validate()
-        print(self.__str__())
 
     def validate(self):
         if self.storage_type not in ["local", "gcp"]:
             raise ValueError(f"Invalid storage type: {self.storage_type}")
 
-        if self.storage_type == "gcp" and (
-            not self.gcp_bucket_name or not self.gcp_credentials_path
-        ):
-            raise ValueError(
-                "GCP storage selected but bucket name or credentials path is missing"
-            )
+        if self.storage_type == "gcp":
+            if not self.gcp_bucket_name:
+                raise ValueError("GCP storage selected but bucket name is missing")
+            if not self.use_cloud_run_auth and not self.gcp_credentials_path:
+                raise ValueError(
+                    "GCP storage selected with local auth, but credentials path is missing"
+                )
 
         if self.manim_quality not in [
             "low_quality",
@@ -72,6 +72,11 @@ class Config:
         if self.log_level not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
             raise ValueError(f"Invalid log level: {self.log_level}")
 
+        if self.use_cloud_run_auth and self.storage_type != "gcp":
+            raise ValueError(
+                "Cloud Run auth is enabled but storage type is not set to GCP"
+            )
+
     def __str__(self):
         return f"""
         Worker Configuration:
@@ -80,6 +85,7 @@ class Config:
         Storage Type: {self.storage_type}
         Local Storage Path: {self.local_storage_path}
         GCP Bucket Name: {self.gcp_bucket_name}
+        Use Cloud Run Auth: {self.use_cloud_run_auth}
         GCP Credentials Path: {self.gcp_credentials_path}
         Use OpenAI: {self.use_openai}
         OpenAI API Key: {self.openai_api_key}
@@ -96,11 +102,4 @@ class Config:
         Manim Output File: {self.manim_output_file}
         Log Level: {self.log_level}
         Log File: {self.log_file}
-        Allowed IPs: {', '.join(self.allowed_ips) if self.allowed_ips else 'All'}
         """
-
-
-# 使用例
-if __name__ == "__main__":
-    config = Config()
-    print(config)
