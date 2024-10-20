@@ -11,8 +11,11 @@ from config import Config
 
 # NOTE: 途中にテキストが含まれている場合には対応していない。
 def extract_code_from_markdown(content: str) -> str:
-    if content.strip().startswith("```python") and content.strip().endswith("```"):
-        lines = content.strip().split("\n")
+    content = content.strip()
+    if (
+        content.startswith("```python") or content.startswith("```")
+    ) and content.endswith("```"):
+        lines = content.split("\n")
         return "\n".join(lines[1:-1])  # Remove the first and last lines (```)
     return content
 
@@ -60,7 +63,8 @@ class Text2ManimModel:
 
     def _generate_script_local(self, prompt: str) -> str:
         # プロンプトの準備
-        full_prompt = f"Generate a Manim script for the following prompt: {prompt}\n\nMakim script:"
+        full_prompt = f"Generate a Manim script for the following prompt: {
+            prompt}\n\nMakim script:"
 
         # トークナイズとモデル入力の準備
         inputs = self.tokenizer(full_prompt, return_tensors="pt").to(self.device)
