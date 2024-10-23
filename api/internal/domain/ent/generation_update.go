@@ -42,6 +42,12 @@ func (gu *GenerationUpdate) SetNillablePrompt(s *string) *GenerationUpdate {
 	return gu
 }
 
+// ClearPrompt clears the value of the "prompt" field.
+func (gu *GenerationUpdate) ClearPrompt() *GenerationUpdate {
+	gu.mutation.ClearPrompt()
+	return gu
+}
+
 // SetStatus sets the "status" field.
 func (gu *GenerationUpdate) SetStatus(ge generation.Status) *GenerationUpdate {
 	gu.mutation.SetStatus(ge)
@@ -165,11 +171,6 @@ func (gu *GenerationUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (gu *GenerationUpdate) check() error {
-	if v, ok := gu.mutation.Prompt(); ok {
-		if err := generation.PromptValidator(v); err != nil {
-			return &ValidationError{Name: "prompt", err: fmt.Errorf(`ent: validator failed for field "Generation.prompt": %w`, err)}
-		}
-	}
 	if v, ok := gu.mutation.Status(); ok {
 		if err := generation.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Generation.status": %w`, err)}
@@ -192,6 +193,9 @@ func (gu *GenerationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := gu.mutation.Prompt(); ok {
 		_spec.SetField(generation.FieldPrompt, field.TypeString, value)
+	}
+	if gu.mutation.PromptCleared() {
+		_spec.ClearField(generation.FieldPrompt, field.TypeString)
 	}
 	if value, ok := gu.mutation.Status(); ok {
 		_spec.SetField(generation.FieldStatus, field.TypeEnum, value)
@@ -248,6 +252,12 @@ func (guo *GenerationUpdateOne) SetNillablePrompt(s *string) *GenerationUpdateOn
 	if s != nil {
 		guo.SetPrompt(*s)
 	}
+	return guo
+}
+
+// ClearPrompt clears the value of the "prompt" field.
+func (guo *GenerationUpdateOne) ClearPrompt() *GenerationUpdateOne {
+	guo.mutation.ClearPrompt()
 	return guo
 }
 
@@ -387,11 +397,6 @@ func (guo *GenerationUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (guo *GenerationUpdateOne) check() error {
-	if v, ok := guo.mutation.Prompt(); ok {
-		if err := generation.PromptValidator(v); err != nil {
-			return &ValidationError{Name: "prompt", err: fmt.Errorf(`ent: validator failed for field "Generation.prompt": %w`, err)}
-		}
-	}
 	if v, ok := guo.mutation.Status(); ok {
 		if err := generation.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Generation.status": %w`, err)}
@@ -431,6 +436,9 @@ func (guo *GenerationUpdateOne) sqlSave(ctx context.Context) (_node *Generation,
 	}
 	if value, ok := guo.mutation.Prompt(); ok {
 		_spec.SetField(generation.FieldPrompt, field.TypeString, value)
+	}
+	if guo.mutation.PromptCleared() {
+		_spec.ClearField(generation.FieldPrompt, field.TypeString)
 	}
 	if value, ok := guo.mutation.Status(); ok {
 		_spec.SetField(generation.FieldStatus, field.TypeEnum, value)

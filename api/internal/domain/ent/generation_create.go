@@ -27,6 +27,14 @@ func (gc *GenerationCreate) SetPrompt(s string) *GenerationCreate {
 	return gc
 }
 
+// SetNillablePrompt sets the "prompt" field if the given value is not nil.
+func (gc *GenerationCreate) SetNillablePrompt(s *string) *GenerationCreate {
+	if s != nil {
+		gc.SetPrompt(*s)
+	}
+	return gc
+}
+
 // SetStatus sets the "status" field.
 func (gc *GenerationCreate) SetStatus(ge generation.Status) *GenerationCreate {
 	gc.mutation.SetStatus(ge)
@@ -180,14 +188,6 @@ func (gc *GenerationCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (gc *GenerationCreate) check() error {
-	if _, ok := gc.mutation.Prompt(); !ok {
-		return &ValidationError{Name: "prompt", err: errors.New(`ent: missing required field "Generation.prompt"`)}
-	}
-	if v, ok := gc.mutation.Prompt(); ok {
-		if err := generation.PromptValidator(v); err != nil {
-			return &ValidationError{Name: "prompt", err: fmt.Errorf(`ent: validator failed for field "Generation.prompt": %w`, err)}
-		}
-	}
 	if _, ok := gc.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "Generation.status"`)}
 	}

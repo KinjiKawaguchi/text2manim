@@ -182,9 +182,22 @@ func (m *GenerationMutation) OldPrompt(ctx context.Context) (v string, err error
 	return oldValue.Prompt, nil
 }
 
+// ClearPrompt clears the value of the "prompt" field.
+func (m *GenerationMutation) ClearPrompt() {
+	m.prompt = nil
+	m.clearedFields[generation.FieldPrompt] = struct{}{}
+}
+
+// PromptCleared returns if the "prompt" field was cleared in this mutation.
+func (m *GenerationMutation) PromptCleared() bool {
+	_, ok := m.clearedFields[generation.FieldPrompt]
+	return ok
+}
+
 // ResetPrompt resets all changes to the "prompt" field.
 func (m *GenerationMutation) ResetPrompt() {
 	m.prompt = nil
+	delete(m.clearedFields, generation.FieldPrompt)
 }
 
 // SetStatus sets the "status" field.
@@ -631,6 +644,9 @@ func (m *GenerationMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *GenerationMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(generation.FieldPrompt) {
+		fields = append(fields, generation.FieldPrompt)
+	}
 	if m.FieldCleared(generation.FieldVideoURL) {
 		fields = append(fields, generation.FieldVideoURL)
 	}
@@ -654,6 +670,9 @@ func (m *GenerationMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *GenerationMutation) ClearField(name string) error {
 	switch name {
+	case generation.FieldPrompt:
+		m.ClearPrompt()
+		return nil
 	case generation.FieldVideoURL:
 		m.ClearVideoURL()
 		return nil

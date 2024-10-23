@@ -11,7 +11,7 @@ var (
 	// GenerationsColumns holds the columns for the "generations" table.
 	GenerationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "prompt", Type: field.TypeString},
+		{Name: "prompt", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"unspecified", "pending", "processing", "completed", "failed"}, Default: "unspecified"},
 		{Name: "video_url", Type: field.TypeString, Nullable: true},
 		{Name: "script_url", Type: field.TypeString, Nullable: true},

@@ -140,6 +140,16 @@ func PromptHasSuffix(v string) predicate.Generation {
 	return predicate.Generation(sql.FieldHasSuffix(FieldPrompt, v))
 }
 
+// PromptIsNil applies the IsNil predicate on the "prompt" field.
+func PromptIsNil() predicate.Generation {
+	return predicate.Generation(sql.FieldIsNull(FieldPrompt))
+}
+
+// PromptNotNil applies the NotNil predicate on the "prompt" field.
+func PromptNotNil() predicate.Generation {
+	return predicate.Generation(sql.FieldNotNull(FieldPrompt))
+}
+
 // PromptEqualFold applies the EqualFold predicate on the "prompt" field.
 func PromptEqualFold(v string) predicate.Generation {
 	return predicate.Generation(sql.FieldEqualFold(FieldPrompt, v))

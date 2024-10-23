@@ -16,10 +16,6 @@ import (
 func init() {
 	generationFields := schema.Generation{}.Fields()
 	_ = generationFields
-	// generationDescPrompt is the schema descriptor for prompt field.
-	generationDescPrompt := generationFields[1].Descriptor()
-	// generation.PromptValidator is a validator for the "prompt" field. It is called by the builders before save.
-	generation.PromptValidator = generationDescPrompt.Validators[0].(func(string) error)
 	// generationDescUpdatedAt is the schema descriptor for updated_at field.
 	generationDescUpdatedAt := generationFields[6].Descriptor()
 	// generation.DefaultUpdatedAt holds the default value on creation for the updated_at field.

@@ -56,8 +56,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// PromptValidator is a validator for the "prompt" field. It is called by the builders before save.
-	PromptValidator func(string) error
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.

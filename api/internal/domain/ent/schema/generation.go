@@ -17,8 +17,7 @@ type Generation struct {
 func (Generation) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
-		field.String("prompt").NotEmpty(),
-
+		field.String("prompt").Optional(),
 		field.Enum("status").
 			Values(
 				"unspecified",
@@ -28,24 +27,11 @@ func (Generation) Fields() []ent.Field {
 				"failed",
 			).
 			Default("unspecified"),
-
-		field.String("video_url").
-			Optional(),
-
-		field.String("script_url").
-			Optional(),
-
-		field.String("error_message").
-			Optional().
-			Comment("失敗理由を格納するフィールド"),
-
-		field.Time("updated_at").
-			Default(time.Now).
-			UpdateDefault(time.Now),
-
-		field.Time("created_at").
-			Default(time.Now).
-			Immutable(),
+		field.String("video_url").Optional(),
+		field.String("script_url").Optional(),
+		field.String("error_message").Optional().Comment("失敗理由を格納するフィールド"),
+		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
+		field.Time("created_at").Default(time.Now).Immutable(),
 	}
 }
 
