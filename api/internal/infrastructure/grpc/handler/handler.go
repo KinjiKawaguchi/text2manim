@@ -5,10 +5,10 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/KinjiKawaguchi/text2manim/api/internal/domain/mapper"
 	"github.com/KinjiKawaguchi/text2manim/api/internal/usecase"
 	pb "github.com/KinjiKawaguchi/text2manim/api/pkg/pb/text2manim/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Handler struct {
@@ -47,16 +47,7 @@ func (h *Handler) GetGenerationStatus(ctx context.Context, req *pb.GetGeneration
 	}
 
 	response := &pb.GetGenerationStatusResponse{
-		GenerationStatus: &pb.GenerationStatus{
-			RequestId:    req.RequestId,
-			Status:       pb.GenerationStatus_Status(video.Status),
-			VideoUrl:     video.VideoURL,
-			ScriptUrl:    "", // TODO: Implement script URL https://github.com/KinjiKawaguchi/text2manim/issues/32
-			ErrorMessage: video.ErrorMessage,
-			Prompt:       video.Prompt,
-			CreatedAt:    timestamppb.New(video.CreatedAt),
-			UpdatedAt:    timestamppb.New(video.UpdatedAt),
-		},
+		GenerationStatus: mapper.ToProto(video),
 	}
 
 	duration := time.Since(startTime)

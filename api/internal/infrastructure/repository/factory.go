@@ -12,9 +12,13 @@ import (
 func NewVideoRepository(cfg *config.Config, logger *slog.Logger) (interfaceRepo.VideoRepository, error) {
 	switch cfg.DBType {
 	case "memory":
-		return NewMemoryVideoRepository(logger), nil
+		return NewMemoryVideoRepository(logger)
 	case "postgres":
-		return NewPostgresVideoRepository(cfg, logger)
+		repo, err := NewPostgresVideoRepository(cfg, logger)
+		if err != nil {
+			return nil, err
+		}
+		return repo, nil
 	default:
 		return nil, fmt.Errorf("unsupported database type: %s", cfg.DBType)
 	}
