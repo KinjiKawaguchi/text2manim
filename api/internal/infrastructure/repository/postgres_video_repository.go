@@ -12,6 +12,8 @@ import (
 	"github.com/KinjiKawaguchi/text2manim/api/internal/domain/ent"
 	"github.com/KinjiKawaguchi/text2manim/api/internal/domain/ent/generation"
 	"github.com/google/uuid"
+
+	_ "github.com/lib/pq"
 )
 
 type PostgresVideoRepository struct {
