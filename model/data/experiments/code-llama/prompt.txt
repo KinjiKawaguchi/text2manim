@@ -1,0 +1,2 @@
+"""Visually represent how to determine the y-values when x is 1 and when x is 2 on the graph of y=2x"""
+from manim import *
