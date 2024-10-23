@@ -45,7 +45,7 @@ func (r *PostgresVideoRepository) FindByID(ctx context.Context, id uuid.UUID) (*
 		Only(ctx)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil // TODO: ここチェック
+			return nil, nil
 		}
 		r.logger.Error("Failed to find video by ID", "id", id, "error", err)
 		return nil, err
@@ -55,16 +55,25 @@ func (r *PostgresVideoRepository) FindByID(ctx context.Context, id uuid.UUID) (*
 }
 
 func (r *PostgresVideoRepository) Save(ctx context.Context, video *ent.Generation) (*ent.Generation, error) {
-	result, err := r.entClient.Generation.Create().
-		SetID(video.ID).
-		SetPrompt(video.Prompt).
-		SetStatus(video.Status).
-		SetVideoURL(video.VideoURL).
-		SetScriptURL(video.ScriptURL).
-		SetErrorMessage(video.ErrorMessage).
-		SetCreatedAt(video.CreatedAt).
-		SetUpdatedAt(video.UpdatedAt).
-		Save(ctx)
+	creater := r.entClient.Generation.Create()
+
+	if video.Prompt != "" {
+		creater.SetPrompt(video.Prompt)
+	}
+	if video.Status != "" {
+		creater.SetStatus(video.Status)
+	}
+	if video.VideoURL != "" {
+		creater.SetVideoURL(video.VideoURL)
+	}
+	if video.ScriptURL != "" {
+		creater.SetScriptURL(video.ScriptURL)
+	}
+	if video.ErrorMessage != "" {
+		creater.SetErrorMessage(video.ErrorMessage)
+	}
+
+	result, err := creater.Save(ctx)
 	if err != nil {
 		r.logger.Error("Failed to save video", "error", err)
 		return nil, err
@@ -73,14 +82,25 @@ func (r *PostgresVideoRepository) Save(ctx context.Context, video *ent.Generatio
 }
 
 func (r *PostgresVideoRepository) Update(ctx context.Context, video *ent.Generation) (*ent.Generation, error) {
-	result, err := r.entClient.Generation.UpdateOneID(video.ID).
-		SetPrompt(video.Prompt).
-		SetStatus(video.Status).
-		SetVideoURL(video.VideoURL).
-		SetScriptURL(video.ScriptURL).
-		SetErrorMessage(video.ErrorMessage).
-		SetUpdatedAt(video.UpdatedAt).
-		Save(ctx)
+	updater := r.entClient.Generation.UpdateOneID(video.ID)
+
+	if video.Prompt != "" {
+		updater.SetPrompt(video.Prompt)
+	}
+	if video.Status != "" {
+		updater.SetStatus(video.Status)
+	}
+	if video.VideoURL != "" {
+		updater.SetVideoURL(video.VideoURL)
+	}
+	if video.ScriptURL != "" {
+		updater.SetScriptURL(video.ScriptURL)
+	}
+	if video.ErrorMessage != "" {
+		updater.SetErrorMessage(video.ErrorMessage)
+	}
+
+	result, err := updater.Save(ctx)
 	if err != nil {
 		r.logger.Error("Failed to update video", "error", err)
 		return nil, err
