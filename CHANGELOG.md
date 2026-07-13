@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/KinjiKawaguchi/text2manim/compare/v0.5.0...v0.5.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **ci:** release-pleaseからpublishを直接呼び出す ([1b51c9b](https://github.com/KinjiKawaguchi/text2manim/commit/1b51c9bbacd14e8ad8279bf53b5506c315679ae8))
+
 ## [0.5.0](https://github.com/KinjiKawaguchi/text2manim/compare/v0.4.0...v0.5.0) (2026-07-13)
 
 
