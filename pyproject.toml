@@ -8,7 +8,9 @@ authors = [{ name = "Kinji Kawaguchi" }]
 requires-python = ">=3.14"
 dependencies = [
     "anthropic>=0.40",
+    "fastapi>=0.139.0",
     "openai>=1.60",
+    "uvicorn>=0.51.0",
 ]
 
 [project.scripts]
@@ -16,6 +18,7 @@ text2manim = "text2manim.cli:main"
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "pyrefly>=1.1",
     "pytest>=8.3",
     "ruff>=0.9",
@@ -47,6 +50,10 @@ ignore = [
     "D400",
     "D415",
 ]
+
+[tool.ruff.lint.flake8-type-checking]
+# Pydanticモデルはアノテーションを実行時に評価するためTYPE_CHECKINGへ移動しない
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
 
 [tool.ruff.lint.per-file-ignores]
 "src/text2manim/cli.py" = [
