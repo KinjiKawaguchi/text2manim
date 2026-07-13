@@ -28,9 +28,10 @@ text2manim (PyPIパッケージ)
    manimcommunity 公式のものを実行時に pull する)
 2. **コンテナイメージ (GHCR)**: serve + manim 環境 (ffmpeg / LaTeX) 同梱のサーバーイメージ。
    Cloud Run など Docker デーモンのない実行環境向けで、`sandbox=local` で動かす。
-   注意: イメージの配布は PyAV (ffmpeg ライブラリ) や pango/cairo (LGPL)、TeX などの
-   バイナリ再配布にあたるため、実装時に同梱物のライセンス表記と LGPL 部分の
-   ソース入手先の明示を行うこと (Python 依存のみの PyPI 配布にはこの義務はない)
+   manim 公式イメージをベースに、本体は uv が取得する独立した Python 3.14 環境に載せる
+   (manim 側の Python バージョンに縛られないため)。リリース時に publish ワークフローが
+   GHCR へ push する。同梱サードパーティ (PyAV / pango / cairo / TeX 等) のライセンスは
+   README で言及し、詳細はベースイメージに従う
 
 コンテナイメージ運用では生成コードがサーバーと同じコンテナ境界で実行される。
 このリスクは以下で緩和する (完全な隔離ではない点は README に明記):

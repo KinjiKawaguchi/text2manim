@@ -1,0 +1,10 @@
+.git
+.venv
+.env
+.envrc
+videos/
+docs/
+tests/
+.github/
+*.md
+!README.md
