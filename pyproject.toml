@@ -89,3 +89,8 @@ runtime-evaluated-base-classes = ["pydantic.BaseModel"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# e2eは実LLM・Dockerを使いコストがかかるため既定では除外する (uv run pytest -m e2e で実行)
+addopts = "-m 'not e2e'"
+markers = [
+    "e2e: 実LLMとDockerサンドボックスを使う端到端テスト",
+]
