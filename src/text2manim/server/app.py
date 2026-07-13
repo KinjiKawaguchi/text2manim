@@ -1,6 +1,5 @@
 """FastAPI アプリケーションの構築。
 
-エンドポイントは旧設計の語彙を継承する:
 POST /v1/generations → GET /v1/generations/{id} → GET /v1/generations/{id}/stream (SSE)
 """
 

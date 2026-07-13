@@ -2,8 +2,7 @@
 
 テキストからManim動画を生成するエンジン。CLI・Pythonライブラリ・サーバーモード（REST API）を提供する。
 
-> **リアーキテクト中**: 現在v1を全面的に書き直しています。設計は [docs/DESIGN.md](docs/DESIGN.md) を参照してください。
-> 旧実装（Go API + Python worker構成）は [`v0-archive`](https://github.com/KinjiKawaguchi/text2manim/tree/v0-archive) タグにあります。
+> **開発中**: 設計は [docs/DESIGN.md](docs/DESIGN.md) を参照してください。
 
 ## 目指す姿
 
