@@ -37,6 +37,11 @@ jobs:
       - name: pytest
         run: uv run pytest -q
 
+      - name: pip-audit (ランタイム依存の既知CVE監査)
+        run: |
+          uv export --no-dev --no-hashes --no-emit-project > /tmp/runtime-reqs.txt
+          uvx pip-audit -r /tmp/runtime-reqs.txt --disable-pip --no-deps
+
       - name: ライセンスゲート (ランタイム依存にコピーレフトを持ち込まない)
         run: >
           uv run pip-licenses
