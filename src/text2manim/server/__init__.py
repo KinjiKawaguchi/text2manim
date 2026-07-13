@@ -1,7 +1,5 @@
-"""サーバーモード: REST API + ジョブキュー + SSE 進捗ストリーム。"""
+"""サーバーモード: ステートレスな生成ワーカー (REST + SSE 進捗ストリーム)。"""
 
-from text2manim.server.app import create_app
-from text2manim.server.store import GenerationRecord, GenerationStatus, JobStore
-from text2manim.server.worker import GenerationWorker
+from text2manim.server.app import ServerConfig, create_app
 
-__all__ = ["GenerationRecord", "GenerationStatus", "GenerationWorker", "JobStore", "create_app"]
+__all__ = ["ServerConfig", "create_app"]

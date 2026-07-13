@@ -1,129 +1,113 @@
-"""サーバーモードの API テスト。"""
+"""サーバーモード (ステートレスworker) の API テスト。"""
 
 import json
-import time
 from typing import TYPE_CHECKING
 
-import pytest
 from fastapi.testclient import TestClient
 
-from text2manim import (
-    GenerationResult,
-    PipelineCompleted,
-    RenderExhaustedError,
-    ScriptGenerationStarted,
-)
-from text2manim.server import GenerationWorker, JobStore, create_app
+from text2manim import PipelineSettings
+from text2manim.sandbox import RenderFailure, RenderSuccess, Sandbox
+from text2manim.server import ServerConfig, create_app
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Sequence
     from pathlib import Path
 
-    from text2manim.events import PipelineEvent
-    from text2manim.server.worker import GenerateFn
+    from text2manim.llm import ChatMessage
+    from text2manim.sandbox import RenderResult
 
-_WAIT_TIMEOUT_SECONDS = 10.0
-
-
-def _fake_generate(
-    prompt: str,
-    output_path: Path,
-    on_event: Callable[[PipelineEvent], None],
-) -> GenerationResult:
-    """即座に成功するフェイクの生成処理。"""
-    del prompt
-    on_event(ScriptGenerationStarted(attempt=1, is_repair=False))
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_bytes(b"fake-mp4")
-    on_event(PipelineCompleted(video_path=output_path, script="script", attempts=1))
-    return GenerationResult(video_path=output_path, script="script", attempts=1)
+_VALID_RESPONSE = '```python\nclass GeneratedScene:\n    marker = "v1"\n```'
 
 
-def _failing_generate(
-    prompt: str,
-    output_path: Path,
-    on_event: Callable[[PipelineEvent], None],
-) -> GenerationResult:
-    """必ず失敗するフェイクの生成処理。"""
-    del prompt, output_path, on_event
-    raise RenderExhaustedError(3, "boom")
+class FakeLlm:
+    """常に同じ応答を返す LlmClient 実装。"""
+
+    def __init__(self, response: str = _VALID_RESPONSE) -> None:
+        """応答を保持する。"""
+        self._response = response
+
+    def complete(self, *, system: str, messages: Sequence[ChatMessage]) -> str:
+        """固定の応答を返す。"""
+        del system, messages
+        return self._response
+
+
+class FakeSandbox:
+    """出力先に固定バイト列を書き込む Sandbox 実装。"""
+
+    def __init__(self, *, fail: bool = False) -> None:
+        """成否を設定する。"""
+        self._fail = fail
+
+    def render(self, script: str, *, scene_name: str, output_path: Path) -> RenderResult:
+        """成功時はダミー動画を書き込む。"""
+        del script, scene_name
+        if self._fail:
+            return RenderFailure(log="render boom")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_bytes(b"fake-mp4")
+        return RenderSuccess(video_path=output_path)
 
 
 def _make_client(
     tmp_path: Path,
     *,
-    generate: GenerateFn = _fake_generate,
+    sandbox: Sandbox | None = None,
     api_keys: tuple[str, ...] = (),
 ) -> TestClient:
     """テスト用のアプリとクライアントを組み立てる。"""
-    store = JobStore(tmp_path / "jobs.db")
-    worker = GenerationWorker(store, generate, tmp_path / "videos")
-    worker.start()
-    app = create_app(store=store, worker=worker, api_keys=api_keys)
+    app = create_app(
+        ServerConfig(
+            llm=FakeLlm(),
+            sandbox=sandbox if sandbox is not None else FakeSandbox(),
+            output_dir=tmp_path / "videos",
+            pipeline=PipelineSettings(max_attempts=2),
+            api_keys=api_keys,
+        )
+    )
     return TestClient(app)
 
 
-def _wait_terminal(client: TestClient, request_id: str) -> dict[str, object]:
-    """ジョブが終端状態になるまでポーリングする。"""
-    deadline = time.monotonic() + _WAIT_TIMEOUT_SECONDS
-    while time.monotonic() < deadline:
-        response = client.get(f"/v1/generations/{request_id}")
-        body: dict[str, object] = response.json()
-        if body["status"] in ("completed", "failed"):
-            return body
-        time.sleep(0.05)
-    pytest.fail("ジョブが時間内に終端状態になりませんでした")
-
-
-def test_generation_lifecycle(tmp_path: Path) -> None:
-    """作成→処理→完了→動画取得の一連の流れが機能する。"""
-    client = _make_client(tmp_path)
-
-    created = client.post("/v1/generations", json={"prompt": "テスト動画"})
-    assert created.status_code == 202
-    request_id = created.json()["request_id"]
-
-    body = _wait_terminal(client, request_id)
-    assert body["status"] == "completed"
-    assert body["video_path"] is not None
-
-    video = client.get(f"/v1/generations/{request_id}/video")
-    assert video.status_code == 200
-    assert video.content == b"fake-mp4"
-
-
-def test_failed_generation_reports_error(tmp_path: Path) -> None:
-    """生成失敗時は failed 状態とエラーメッセージが記録される。"""
-    client = _make_client(tmp_path, generate=_failing_generate)
-
-    created = client.post("/v1/generations", json={"prompt": "テスト動画"})
-    body = _wait_terminal(client, created.json()["request_id"])
-
-    assert body["status"] == "failed"
-    error = body["error"]
-    assert isinstance(error, str)
-    assert "3回" in error
-
-
-def test_stream_returns_events_and_closes(tmp_path: Path) -> None:
-    """SSE ストリームはイベントを流し、ジョブ終了後に閉じる。"""
-    client = _make_client(tmp_path)
-    created = client.post("/v1/generations", json={"prompt": "テスト動画"})
-    request_id = created.json()["request_id"]
-    _wait_terminal(client, request_id)
-
-    with client.stream("GET", f"/v1/generations/{request_id}/stream") as response:
+def _collect_events(client: TestClient, prompt: str) -> list[dict[str, object]]:
+    """生成リクエストを送り、SSE イベントをすべて集める。"""
+    with client.stream("POST", "/v1/generations", json={"prompt": prompt}) as response:
         assert response.status_code == 200
-        payloads = [
+        return [
             json.loads(line.removeprefix("data: "))
             for line in response.iter_lines()
             if line.startswith("data: ")
         ]
 
-    types = [payload["type"] for payload in payloads]
+
+def test_generation_streams_events_and_serves_video(tmp_path: Path) -> None:
+    """生成の進捗がSSEで流れ、終端イベントのURLから動画を取得できる。"""
+    client = _make_client(tmp_path)
+
+    events = _collect_events(client, "テスト動画")
+
+    types = [event["type"] for event in events]
     assert "script_generation_started" in types
-    assert "completed" in types
-    assert types[-1] == "status"
+    assert types[-1] == "completed"
+
+    completed = events[-1]
+    video_url = completed["video_url"]
+    assert isinstance(video_url, str)
+
+    video = client.get(video_url)
+    assert video.status_code == 200
+    assert video.content == b"fake-mp4"
+
+
+def test_failed_generation_ends_with_failed_event(tmp_path: Path) -> None:
+    """全試行が失敗した場合は failed イベントで終わる。"""
+    client = _make_client(tmp_path, sandbox=FakeSandbox(fail=True))
+
+    events = _collect_events(client, "テスト動画")
+
+    assert events[-1]["type"] == "failed"
+    error = events[-1]["error"]
+    assert isinstance(error, str)
+    assert "2回" in error
 
 
 def test_requires_api_key_when_configured(tmp_path: Path) -> None:
@@ -133,19 +117,22 @@ def test_requires_api_key_when_configured(tmp_path: Path) -> None:
     denied = client.post("/v1/generations", json={"prompt": "テスト動画"})
     assert denied.status_code == 401
 
-    allowed = client.post(
+    with client.stream(
+        "POST",
         "/v1/generations",
         json={"prompt": "テスト動画"},
         headers={"x-api-key": "secret-key"},
-    )
-    assert allowed.status_code == 202
+    ) as allowed:
+        assert allowed.status_code == 200
 
 
-def test_unknown_generation_returns_404(tmp_path: Path) -> None:
-    """存在しないジョブは 404 を返す。"""
+def test_video_endpoint_rejects_invalid_filenames(tmp_path: Path) -> None:
+    """UUID形式以外のファイル名 (パストラバーサル等) は 404 になる。"""
     client = _make_client(tmp_path)
-    response = client.get("/v1/generations/does-not-exist")
-    assert response.status_code == 404
+
+    for filename in ("../../etc/passwd", "a.mp4", "0" * 32 + ".txt"):
+        response = client.get(f"/v1/videos/{filename}")
+        assert response.status_code == 404
 
 
 def test_empty_prompt_is_rejected(tmp_path: Path) -> None:
@@ -153,3 +140,10 @@ def test_empty_prompt_is_rejected(tmp_path: Path) -> None:
     client = _make_client(tmp_path)
     response = client.post("/v1/generations", json={"prompt": ""})
     assert response.status_code == 422
+
+
+def test_health(tmp_path: Path) -> None:
+    """ヘルスチェックは認証なしで応答する。"""
+    client = _make_client(tmp_path, api_keys=("secret-key",))
+    response = client.get("/v1/health")
+    assert response.status_code == 200

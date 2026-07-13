@@ -29,8 +29,9 @@ from text2manim import (
     ValidationFailed,
     generate_video,
 )
-from text2manim.server import GenerationWorker, JobStore, create_app
-from text2manim.server.worker import build_generate_fn
+from text2manim.llm import create_llm_client
+from text2manim.sandbox import create_sandbox
+from text2manim.server import ServerConfig, create_app
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -101,14 +102,15 @@ def _run_serve(argv: Sequence[str]) -> None:
     parser.add_argument("--host", default="127.0.0.1", help="バインドするホスト (既定: 127.0.0.1)")
     parser.add_argument("--port", type=int, default=8000, help="ポート番号 (既定: 8000)")
     parser.add_argument(
-        "--db",
-        default="text2manim.db",
-        help="SQLite データベースファイルのパス (既定: text2manim.db)",
-    )
-    parser.add_argument(
         "--output-dir",
         default="videos",
         help="生成した動画の保存先ディレクトリ (既定: videos)",
+    )
+    parser.add_argument(
+        "--max-concurrency",
+        type=int,
+        default=1,
+        help="同時に実行するレンダリング数の上限 (既定: 1)",
     )
     _add_generation_flags(parser)
     namespace = parser.parse_args(list(argv))
@@ -116,13 +118,19 @@ def _run_serve(argv: Sequence[str]) -> None:
 
     output_dir = Path(str(namespace.output_dir))
     output_dir.mkdir(parents=True, exist_ok=True)
-    store = JobStore(Path(str(namespace.db)))
-    worker = GenerationWorker(store, build_generate_fn(options), output_dir)
-    worker.start()
     api_keys = _api_keys_from_env()
     if not api_keys:
         print(f"警告: {_API_KEYS_ENV_VAR} が未設定のため認証なしで起動します", file=sys.stderr)
-    app = create_app(store=store, worker=worker, api_keys=api_keys)
+    app = create_app(
+        ServerConfig(
+            llm=create_llm_client(options.llm),
+            sandbox=create_sandbox(options.render),
+            output_dir=output_dir,
+            pipeline=options.pipeline,
+            api_keys=api_keys,
+            max_concurrent_renders=int(namespace.max_concurrency),
+        )
+    )
     uvicorn.run(app, host=str(namespace.host), port=int(namespace.port))
 
 

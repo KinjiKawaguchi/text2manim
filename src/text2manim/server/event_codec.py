@@ -36,10 +36,9 @@ def serialize_event(event: PipelineEvent) -> dict[str, object]:
             return {"type": "render_started", "attempt": attempt}
         case RenderFailed(attempt=attempt, log=log):
             return {"type": "render_failed", "attempt": attempt, "log": log}
-        case PipelineCompleted(video_path=video_path, script=script, attempts=attempts):
+        case PipelineCompleted(script=script, attempts=attempts):
             return {
                 "type": "completed",
-                "video_path": str(video_path),
                 "script": script,
                 "attempts": attempts,
             }
