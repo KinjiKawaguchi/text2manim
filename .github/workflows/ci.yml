@@ -36,3 +36,9 @@ jobs:
 
       - name: pytest
         run: uv run pytest -q
+
+      - name: ライセンスゲート (ランタイム依存にコピーレフトを持ち込まない)
+        run: >
+          uv run pip-licenses
+          --packages $(uv export --no-dev --no-hashes --no-emit-project | grep -v '^#' | cut -d= -f1 | tr '\n' ' ')
+          --fail-on "GNU General Public License v2 (GPLv2);GNU General Public License v3 (GPLv3);GNU Affero General Public License v3;GNU Lesser General Public License v2 (LGPLv2);GNU Lesser General Public License v3 (LGPLv3)"
