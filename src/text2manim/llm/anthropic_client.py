@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING
 
-from anthropic import Anthropic
+from anthropic import Anthropic, omit
 from anthropic.types import MessageParam, TextBlock
 
 from text2manim.config import DEFAULT_ANTHROPIC_MODEL, LlmSettings
@@ -33,12 +33,13 @@ class AnthropicClient:
         params: list[MessageParam] = [
             {"role": message.role, "content": message.content} for message in messages
         ]
+        temperature = self._settings.temperature
         response = self._client.messages.create(
             model=self._model,
             system=system,
             messages=params,
             max_tokens=self._settings.max_output_tokens,
-            temperature=self._settings.temperature,
+            temperature=omit if temperature is None else temperature,
         )
         texts = [block.text for block in response.content if isinstance(block, TextBlock)]
         if not texts:

@@ -20,6 +20,8 @@ class LlmSettings:
     `openai-compatible` は OpenAI 本家に加え、OpenAI 互換 API を話す
     ローカルLLMサーバー (Ollama / vLLM / LM Studio 等) を `base_url` 指定でカバーする。
     `api_key` が None の場合は各プロバイダーの標準環境変数から解決される。
+    `temperature` が None の場合はリクエストに含めず、プロバイダーの既定に任せる
+    (最近の Claude モデルは temperature の指定自体を拒否するため)。
     """
 
     provider: LlmProvider = "anthropic"
@@ -27,7 +29,7 @@ class LlmSettings:
     api_key: str | None = None
     base_url: str | None = None
     max_output_tokens: int = 8192
-    temperature: float = 0.2
+    temperature: float | None = None
 
 
 @dataclass(frozen=True, slots=True)
