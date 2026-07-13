@@ -36,7 +36,7 @@ from text2manim.events import (
 )
 from text2manim.generate import GenerationOptions, GenerationResult, generate_video
 
-__version__ = "0.1.0"  # x-release-please-version
+__version__ = "0.5.0"  # x-release-please-version
 
 __all__ = [
     "EmptyLlmResponseError",
