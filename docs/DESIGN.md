@@ -109,6 +109,13 @@ dockerモードはmanim環境（ffmpeg・LaTeX・pangocairo等）をイメージ
 ### サーバーモード
 
 - FastAPI + SQLite + プロセス内ワーカー。**外部DB・キューを必須にしない**
+- これは SQLite と同じ意味での「組み込みジョブランナー」であり、**単一ノード専用**。
+  水平スケールは非ゴールで、育てる予定もない (Cloud Run では min-instances =
+  max-instances = 1 が前提)。スケールが必要になったら serve を置き換え、
+  アプリケーション側 (例: text2manim-demo のバックエンド) が text2manim を
+  ライブラリとして組み込み、キュー・状態管理をクラウドのマネージドサービスで持つ。
+  エンジン (generate / pipeline) はジョブの存在を知らないため、この移行で
+  エンジン側の変更は発生しない (依存方向は import-linter で強制)
 - REST契約（demoリポジトリが消費する安定API）:
   - `POST /v1/generations` … ジョブ作成、`request_id` を返す
   - `GET  /v1/generations/{request_id}` … ステータス取得
