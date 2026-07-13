@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: uvをセットアップ
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: 依存を同期
+        run: uv sync --locked
+
+      - name: ruff check
+        run: uv run ruff check
+
+      - name: ruff format
+        run: uv run ruff format --check
+
+      - name: minport
+        run: uv run minport check src/ tests/
+
+      - name: import-linter
+        run: uv run lint-imports
+
+      - name: pyrefly
+        run: uv run pyrefly check
+
+      - name: pytest
+        run: uv run pytest -q

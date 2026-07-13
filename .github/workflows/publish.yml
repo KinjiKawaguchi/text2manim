@@ -1,0 +1,24 @@
+name: publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      # PyPIのTrusted Publishing (OIDC) に必要
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: uvをセットアップ
+        uses: astral-sh/setup-uv@v6
+
+      - name: ビルド
+        run: uv build
+
+      - name: PyPIへ公開
+        run: uv publish
