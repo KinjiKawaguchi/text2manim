@@ -1,8 +1,13 @@
 name: publish
 
+# release-please が GITHUB_TOKEN で作るリリースは release イベントを発火させないため、
+# 通常経路は release-please ワークフローからの workflow_call。
+# release トリガーは手動でリリースを作った場合の保険、workflow_dispatch は再実行用。
 on:
   release:
     types: [published]
+  workflow_call:
+  workflow_dispatch:
 
 jobs:
   pypi:
