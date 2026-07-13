@@ -1,9 +1,12 @@
 """ホスト上で manim を直接実行するサンドボックス実装。
 
-隔離がないため、信頼できる環境での利用・開発用途を想定する。
-公開サーバーでは Docker サンドボックスを使うこと。
+プロセスレベルの隔離がないため、信頼できる環境での利用と、
+Cloud Run などコンテナ自体が隔離境界となるデーモンレス環境を想定する。
+LLM API キー等のシークレットを生成コードへ渡さないよう、
+subprocess の環境変数は許可リスト方式で最小化する。
 """
 
+import os
 import shutil
 import subprocess
 import tempfile
@@ -21,6 +24,8 @@ from text2manim.sandbox.common import (
 
 if TYPE_CHECKING:
     from text2manim.config import RenderSettings
+
+_INHERITED_ENV_VARS = ("PATH", "HOME", "LANG", "LC_ALL", "TMPDIR")
 
 
 class LocalSandbox:
@@ -55,6 +60,7 @@ class LocalSandbox:
                     text=True,
                     timeout=self._settings.timeout_seconds,
                     check=False,
+                    env=_minimal_env(),
                 )
             except FileNotFoundError as exc:
                 raise SandboxUnavailableError(self._settings.manim_executable) from exc
@@ -76,3 +82,14 @@ class LocalSandbox:
             output_path.parent.mkdir(parents=True, exist_ok=True)
             shutil.move(video_path, output_path)
             return RenderSuccess(video_path=output_path)
+
+
+def _minimal_env() -> dict[str, str]:
+    """レンダリング subprocess に渡す最小限の環境変数を組み立てる。
+
+    LLM API キー等のシークレットを生成コードに継承させないため、
+    許可リスト方式で構成する。
+    """
+    return {
+        name: value for name in _INHERITED_ENV_VARS if (value := os.environ.get(name)) is not None
+    }
