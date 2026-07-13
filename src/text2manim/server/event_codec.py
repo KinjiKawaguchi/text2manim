@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING
 
-from text2manim.events import (
+from text2manim import (
     PipelineCompleted,
     RenderFailed,
     RenderStarted,

@@ -5,21 +5,22 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from text2manim.config import PipelineSettings
-from text2manim.errors import RenderExhaustedError
-from text2manim.events import (
+from text2manim import (
     PipelineCompleted,
+    PipelineSettings,
+    RenderExhaustedError,
     RenderFailed,
     ScriptGenerationStarted,
     ValidationFailed,
 )
-from text2manim.pipeline.runner import run_pipeline
-from text2manim.sandbox.base import RenderFailure, RenderResult, RenderSuccess
+from text2manim.pipeline import run_pipeline
+from text2manim.sandbox import RenderFailure, RenderSuccess
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from text2manim.llm.base import ChatMessage
+    from text2manim.llm import ChatMessage
+    from text2manim.sandbox.base import RenderResult
 
 
 def scene_script(marker: str) -> str:

@@ -53,6 +53,9 @@ CLIファースト。サーバーやDBのセットアップを初回体験に要
 - プロジェクト管理: **uv**
 - 型安全を最優先する: 型チェックは **pyrefly（preset = all）**、lintは **ruff（select = ALL）**。
   イミュータブルなfrozen dataclassとユニオン型 + match文による網羅性チェックを基本形とする
+- import規律: **minport**（re-export経由の最短import経路を強制）と
+  **import-linter**（レイヤー間の依存方向契約: cli → server → generate → pipeline →
+  llm|sandbox → events|errors|config）を併用する
 - Webフレームワーク: FastAPI（サーバーモード実装時）
 
 ## アーキテクチャ

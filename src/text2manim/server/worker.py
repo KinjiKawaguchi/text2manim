@@ -8,16 +8,15 @@ import queue
 import threading
 from typing import TYPE_CHECKING
 
-from text2manim.errors import Text2ManimError
-from text2manim.generate import generate_video
+from text2manim import Text2ManimError, generate_video
 from text2manim.server.event_codec import serialize_event
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
 
+    from text2manim import GenerationOptions, GenerationResult
     from text2manim.events import PipelineEvent
-    from text2manim.generate import GenerationOptions, GenerationResult
     from text2manim.server.store import JobStore
 
 type GenerateFn = Callable[[str, Path, Callable[[PipelineEvent], None]], GenerationResult]

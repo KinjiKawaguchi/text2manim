@@ -12,7 +12,7 @@ from text2manim.events import (
     ScriptGenerationStarted,
     ValidationFailed,
 )
-from text2manim.llm.base import ChatMessage, LlmClient
+from text2manim.llm import ChatMessage, LlmClient
 from text2manim.pipeline.extract import extract_code
 from text2manim.pipeline.prompts import (
     SCENE_NAME,
@@ -21,7 +21,7 @@ from text2manim.pipeline.prompts import (
     build_repair_message,
 )
 from text2manim.pipeline.validate import validate_script
-from text2manim.sandbox.base import RenderFailure, RenderSuccess, Sandbox
+from text2manim.sandbox import RenderFailure, RenderSuccess, Sandbox
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

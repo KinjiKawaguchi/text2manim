@@ -4,7 +4,7 @@
 コード生成の品質が安定するため。
 """
 
-from text2manim.llm.base import ChatMessage
+from text2manim.llm import ChatMessage
 
 SCENE_NAME = "GeneratedScene"
 

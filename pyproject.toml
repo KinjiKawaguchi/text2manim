@@ -19,6 +19,8 @@ text2manim = "text2manim.cli:main"
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
+    "import-linter>=2.13",
+    "minport>=0.3.1",
     "pyrefly>=1.1",
     "pytest>=8.3",
     "ruff>=0.9",
@@ -27,6 +29,25 @@ dev = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.minport]
+src = ["src"]
+
+[tool.importlinter]
+root_package = "text2manim"
+
+# 上の層は下の層に依存できるが、逆方向と同一層内の相互依存を禁止する
+[[tool.importlinter.contracts]]
+name = "レイヤー構造"
+type = "layers"
+layers = [
+    "text2manim.cli",
+    "text2manim.server",
+    "text2manim.generate",
+    "text2manim.pipeline",
+    "text2manim.llm | text2manim.sandbox",
+    "text2manim.events | text2manim.errors | text2manim.config",
+]
 
 [tool.pyrefly]
 preset = "all"

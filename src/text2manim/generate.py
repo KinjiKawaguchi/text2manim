@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING
 
 from text2manim.config import LlmSettings, PipelineSettings, RenderSettings
 from text2manim.events import PipelineCompleted, PipelineEvent
-from text2manim.llm.factory import create_llm_client
-from text2manim.pipeline.runner import run_pipeline
-from text2manim.sandbox.factory import create_sandbox
+from text2manim.llm import create_llm_client
+from text2manim.pipeline import run_pipeline
+from text2manim.sandbox import create_sandbox
 
 if TYPE_CHECKING:
     from collections.abc import Callable
